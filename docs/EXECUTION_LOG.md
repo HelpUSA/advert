@@ -28,3 +28,4 @@ Finish Stage 1 documentation index and validate build/status.
 - Updated /campaigns with realistic Stage 2 seed campaigns.
 - Updated /drafts with realistic Stage 2 seed content drafts.
 - Updated /approvals with realistic Stage 2 approval states.
+- Updated /calendar with realistic Stage 2 content calendar slots.
