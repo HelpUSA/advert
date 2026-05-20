@@ -1,21 +1,22 @@
 ﻿# Current Stage
 
 ## Active stage
-Stage 3 - Frontend MVP
+Stage 4 - Railway API
 
 ## Previous stage
-Stage 2 - Core planning model: completed.
+Stage 3 - Frontend MVP: completed.
 
-## Stage 3 objective
-Make the web interface useful before backend integration.
+## Stage 4 objective
+Create backend service for future persistence and watcher integration.
 
-## Stage 3 deliverables
-- Shared app navigation
-- Improved page layout
-- Reusable UI patterns
-- More coherent dashboard summary
-- Better static seed data presentation
-- Final Stage 3 validation build
+## Stage 4 deliverables
+- services/api backend skeleton
+- Health endpoint
+- Core DTO definitions
+- Validation direction
+- Railway deployment notes
+- API README
+- Local API validation command
 
-## Stage 3 first task
-Create shared navigation and improve the root dashboard experience.
+## Stage 4 first task
+Create services/api with a minimal Node API health endpoint and package scripts.

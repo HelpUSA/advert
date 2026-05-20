@@ -50,3 +50,8 @@ Finish Stage 1 documentation index and validate build/status.
 - Stage 3 refined content calendar MVP details.
 - Stage 3 refined watcher workflow MVP details.
 - Stage 3 refined reports MVP details.
+
+## Stage 3 closed
+- Frontend MVP completed.
+- Shared navigation, dashboard and all core module screens refined.
+- Next stage is Stage 4 Railway API.

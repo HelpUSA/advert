@@ -20,3 +20,4 @@
 - CAMPAIGN_MODEL.md: campaign planning fields, readiness and examples.
 - CONTENT_MODEL.md: content draft fields, formats, asset briefs and review checklist.
 - STAGE_2_COMPLETION.md: Stage 2 completion summary.
+- STAGE_3_COMPLETION.md: Stage 3 completion summary.
