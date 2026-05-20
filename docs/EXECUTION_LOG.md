@@ -12,3 +12,8 @@
 
 ## Next
 Finish Stage 1 documentation index and validate build/status.
+
+## Stage 1 closed
+- Product foundation completed.
+- Build validated.
+- Next stage is Stage 2 core planning model.
