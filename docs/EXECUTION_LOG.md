@@ -17,3 +17,6 @@ Finish Stage 1 documentation index and validate build/status.
 - Product foundation completed.
 - Build validated.
 - Next stage is Stage 2 core planning model.
+
+## Stage 2 started
+- Created DATA_MODEL.md for the core planning model.

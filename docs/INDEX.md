@@ -12,3 +12,5 @@
 
 ## Technical
 - ARCHITECTURE.md: frontend, backend, entities and safety model.
+
+- DATA_MODEL.md: core entities, relationships and workflow states.
