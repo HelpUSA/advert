@@ -42,3 +42,5 @@ Finish Stage 1 documentation index and validate build/status.
 - Stage 3 refined shared module styling and brand registry details.
 - Stage 3 refined campaign planner MVP details.
 - Stage 3 refined campaign planner MVP details.
+- Stage 3 refined draft generator MVP details.
+- Stage 3 refined draft generator MVP details.
