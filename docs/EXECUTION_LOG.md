@@ -31,3 +31,9 @@ Finish Stage 1 documentation index and validate build/status.
 - Updated /calendar with realistic Stage 2 content calendar slots.
 - Updated /workflow with realistic watcher operating steps.
 - Updated /reports with realistic Stage 2 report summaries.
+
+## Stage 2 closed
+- Core planning model completed.
+- Data model, workflow states, safety gates, campaign model and content model documented.
+- Campaigns, drafts, approvals, calendar, workflow and reports screens updated with realistic seed content.
+- Next stage is Stage 3 frontend MVP.

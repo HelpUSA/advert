@@ -1,20 +1,21 @@
 ﻿# Current Stage
 
 ## Active stage
-Stage 2 - Core planning model
+Stage 3 - Frontend MVP
 
 ## Previous stage
-Stage 1 - Product foundation: completed.
+Stage 2 - Core planning model: completed.
 
-## Stage 2 objective
-Define entities and workflows for brand profiles, campaigns, calendars, drafts, approvals, publishing tasks and reports.
+## Stage 3 objective
+Make the web interface useful before backend integration.
 
-## Stage 2 deliverables
-- Data model documentation
-- Workflow state documentation
-- Safety gate documentation
-- Updated module docs
-- Static screens with more realistic seed content
+## Stage 3 deliverables
+- Shared app navigation
+- Improved page layout
+- Reusable UI patterns
+- More coherent dashboard summary
+- Better static seed data presentation
+- Final Stage 3 validation build
 
-## Stage 2 first task
-Create DATA_MODEL.md with the core entity definitions and relationships.
+## Stage 3 first task
+Create shared navigation and improve the root dashboard experience.

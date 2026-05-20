@@ -19,3 +19,4 @@
 - SAFETY_GATES.md: automation permissions, restrictions and approval gates.
 - CAMPAIGN_MODEL.md: campaign planning fields, readiness and examples.
 - CONTENT_MODEL.md: content draft fields, formats, asset briefs and review checklist.
+- STAGE_2_COMPLETION.md: Stage 2 completion summary.
