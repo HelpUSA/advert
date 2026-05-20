@@ -39,3 +39,4 @@ Finish Stage 1 documentation index and validate build/status.
 - Next stage is Stage 3 frontend MVP.
 - Stage 3 started with shared navigation and improved dashboard.
 - Stage 3 started with shared navigation and improved dashboard.
+- Stage 3 refined shared module styling and brand registry details.
