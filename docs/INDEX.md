@@ -16,3 +16,4 @@
 - DATA_MODEL.md: core entities, relationships and workflow states.
 - WORKFLOW_STATES.md: lifecycle states and transition rules.
 - WORKFLOW_STATES.md: lifecycle states and transition rules.
+- SAFETY_GATES.md: automation permissions, restrictions and approval gates.
