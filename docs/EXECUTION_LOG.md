@@ -20,3 +20,5 @@ Finish Stage 1 documentation index and validate build/status.
 
 ## Stage 2 started
 - Created DATA_MODEL.md for the core planning model.
+- Created WORKFLOW_STATES.md for Stage 2 lifecycle definitions.
+- Created WORKFLOW_STATES.md for Stage 2 lifecycle definitions.

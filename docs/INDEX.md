@@ -14,3 +14,5 @@
 - ARCHITECTURE.md: frontend, backend, entities and safety model.
 
 - DATA_MODEL.md: core entities, relationships and workflow states.
+- WORKFLOW_STATES.md: lifecycle states and transition rules.
+- WORKFLOW_STATES.md: lifecycle states and transition rules.
