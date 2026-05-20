@@ -1,0 +1,14 @@
+﻿# Execution Log
+
+## 2026-05-20
+- Created local project at D:/dev/advert.
+- Created Next.js frontend at apps/web.
+- Created initial dashboard and routes.
+- Added brand registry seed view.
+- Created docs for product vision, architecture, roadmap, routes and brand registry.
+
+## Current HEAD before this document
+9153f7b Add brand registry seed view
+
+## Next
+Finish Stage 1 documentation index and validate build/status.
