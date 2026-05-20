@@ -46,3 +46,5 @@ Finish Stage 1 documentation index and validate build/status.
 - Stage 3 refined draft generator MVP details.
 - Stage 3 refined approval queue MVP details.
 - Stage 3 refined approval queue MVP details.
+- Stage 3 refined content calendar MVP details.
+- Stage 3 refined content calendar MVP details.
