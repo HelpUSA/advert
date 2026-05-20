@@ -30,3 +30,4 @@ Finish Stage 1 documentation index and validate build/status.
 - Updated /approvals with realistic Stage 2 approval states.
 - Updated /calendar with realistic Stage 2 content calendar slots.
 - Updated /workflow with realistic watcher operating steps.
+- Updated /reports with realistic Stage 2 report summaries.
