@@ -37,3 +37,5 @@ Finish Stage 1 documentation index and validate build/status.
 - Data model, workflow states, safety gates, campaign model and content model documented.
 - Campaigns, drafts, approvals, calendar, workflow and reports screens updated with realistic seed content.
 - Next stage is Stage 3 frontend MVP.
+- Stage 3 started with shared navigation and improved dashboard.
+- Stage 3 started with shared navigation and improved dashboard.
