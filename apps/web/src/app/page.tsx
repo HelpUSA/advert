@@ -1,4 +1,4 @@
-﻿const modules = ['Brand registry', 'Campaign planner', 'Content calendar', 'Draft generator', 'Approval queue', 'Publishing checklist', 'Metrics report', 'Watcher handoff'];
+﻿import Link from 'next/link';
 
 export default function Home() {
  return (
@@ -10,7 +10,13 @@ export default function Home() {
  <div className='pills'><span>Vercel frontend</span><span>Railway API</span><span>advert.helpusbr.com</span></div>
  </section>
  <section className='grid'>
- {modules.map((item) => <article className='card' key={item}><h2>{item}</h2><p>Initial MVP module for safe advertising operations with approval, logs and watcher execution.</p></article>)}
+ <Link className='card linkcard' href='/brands'><h2>Brand registry</h2><p>Profiles for companies, people, services and products.</p><span>Open module</span></Link>
+ <Link className='card linkcard' href='/campaigns'><h2>Campaign planner</h2><p>Define objective, audience, channels and cadence.</p><span>Open module</span></Link>
+ <Link className='card linkcard' href='/calendar'><h2>Content calendar</h2><p>Organize weekly and monthly publishing plans.</p><span>Open module</span></Link>
+ <Link className='card linkcard' href='/drafts'><h2>Draft generator</h2><p>Prepare posts, scripts, briefs and reusable assets.</p><span>Open module</span></Link>
+ <Link className='card linkcard' href='/approvals'><h2>Approval queue</h2><p>Review and authorize before publishing.</p><span>Open module</span></Link>
+ <Link className='card linkcard' href='/reports'><h2>Metrics report</h2><p>Track results and next actions.</p><span>Open module</span></Link>
+ <Link className='card linkcard' href='/workflow'><h2>Watcher workflow</h2><p>Operational handoff and execution model.</p><span>Open module</span></Link>
  </section>
  </main>
  );
