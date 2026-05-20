@@ -24,3 +24,4 @@ Finish Stage 1 documentation index and validate build/status.
 - Created WORKFLOW_STATES.md for Stage 2 lifecycle definitions.
 - Created SAFETY_GATES.md for Stage 2 automation boundaries.
 - Created CAMPAIGN_MODEL.md for Stage 2 campaign planning.
+- Created CONTENT_MODEL.md for Stage 2 draft and asset planning.
