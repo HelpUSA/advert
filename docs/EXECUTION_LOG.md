@@ -27,3 +27,4 @@ Finish Stage 1 documentation index and validate build/status.
 - Created CONTENT_MODEL.md for Stage 2 draft and asset planning.
 - Updated /campaigns with realistic Stage 2 seed campaigns.
 - Updated /drafts with realistic Stage 2 seed content drafts.
+- Updated /approvals with realistic Stage 2 approval states.
