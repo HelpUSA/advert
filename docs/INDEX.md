@@ -17,3 +17,4 @@
 - WORKFLOW_STATES.md: lifecycle states and transition rules.
 - WORKFLOW_STATES.md: lifecycle states and transition rules.
 - SAFETY_GATES.md: automation permissions, restrictions and approval gates.
+- CAMPAIGN_MODEL.md: campaign planning fields, readiness and examples.
