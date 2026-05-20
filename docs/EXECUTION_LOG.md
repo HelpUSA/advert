@@ -55,3 +55,6 @@ Finish Stage 1 documentation index and validate build/status.
 - Frontend MVP completed.
 - Shared navigation, dashboard and all core module screens refined.
 - Next stage is Stage 4 Railway API.
+
+## Stage 4 started
+- Created services/api Node API skeleton with health, version and entities endpoints.

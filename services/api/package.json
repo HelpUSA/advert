@@ -1,0 +1,21 @@
+{
+  "name": "advert-api",
+  "version": "0.1.0",
+  "description": "Railway API skeleton for Advert HelpUS BR.",
+  "main": "src/server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "check": "node --check src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}
