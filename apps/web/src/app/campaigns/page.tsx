@@ -4,7 +4,17 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import AdminGate from '../../components/AdminGate';
 import { useLanguage } from '../../lib/LanguageContext';
-import { Megaphone, ArrowLeft, Plus, CheckCircle2, Calendar } from 'lucide-react';
+import {
+  Megaphone,
+  ArrowLeft,
+  Plus,
+  CheckCircle2,
+  Calendar,
+  X,
+  Search,
+  Target,
+  Share2,
+} from 'lucide-react';
 
 const initialCampaigns = [
   {
@@ -43,8 +53,54 @@ const initialCampaigns = [
 ];
 
 export default function CampaignsPage() {
-  const [campaigns] = useState(initialCampaigns);
+  const [campaigns, setCampaigns] = useState(initialCampaigns);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    brand: 'HelpUS BR',
+    objective: '',
+    cadence: '3 posts / semana',
+    channels: 'LinkedIn, Instagram',
+    next: '',
+  });
+
   const { t } = useLanguage();
+
+  const handleCreateCampaign = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name.trim()) return;
+
+    const newCamp = {
+      id: `camp-${Date.now()}`,
+      name: formData.name.trim(),
+      brand: formData.brand,
+      objective: formData.objective.trim() || 'Aumento de conversão e autoridade',
+      status: 'Ativa',
+      cadence: formData.cadence.trim(),
+      channels: formData.channels.trim(),
+      readiness: 'Iniciada e vinculada à mesa operacional',
+      next: formData.next.trim() || 'Gerar primeiros rascunhos com IA',
+    };
+
+    setCampaigns([newCamp, ...campaigns]);
+    setIsModalOpen(false);
+    setFormData({
+      name: '',
+      brand: 'HelpUS BR',
+      objective: '',
+      cadence: '3 posts / semana',
+      channels: 'LinkedIn, Instagram',
+      next: '',
+    });
+  };
+
+  const filteredCampaigns = campaigns.filter(
+    (c) =>
+      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.objective.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <AdminGate>
@@ -72,13 +128,29 @@ export default function CampaignsPage() {
             </div>
           </div>
 
-          <button className="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs shadow-md transition flex items-center gap-2">
-            <Plus className="w-4 h-4" /> Nova Campanha
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              <input
+                type="text"
+                placeholder="Buscar campanha..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 pr-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-400 transition"
+              />
+            </div>
+
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs shadow-md transition flex items-center gap-2 cursor-pointer"
+            >
+              <Plus className="w-4 h-4" /> Nova Campanha
+            </button>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {campaigns.map((camp) => (
+          {filteredCampaigns.map((camp) => (
             <article
               key={camp.id}
               className="bg-slate-900/80 border border-slate-800 hover:border-slate-700 p-6 rounded-2xl flex flex-col justify-between space-y-5 shadow-lg transition"
@@ -98,33 +170,155 @@ export default function CampaignsPage() {
                   <p className="text-xs text-slate-300 mt-1 leading-relaxed">{camp.objective}</p>
                 </div>
 
-                <div className="space-y-2 pt-2 text-xs border-t border-slate-800/80">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Cadência:</span>
-                    <span className="font-semibold text-slate-200 flex items-center gap-1">
-                      <Calendar className="w-3 h-3 text-sky-400" /> {camp.cadence}
-                    </span>
+                <div className="space-y-2.5 pt-2 text-xs border-t border-slate-800/80">
+                  <div className="flex items-start gap-2">
+                    <Calendar className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-300 block">Cadência:</span>
+                      <span className="text-slate-400 text-[11px]">{camp.cadence}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Canais:</span>
-                    <span className="text-[11px] text-slate-300 font-mono">{camp.channels}</span>
+
+                  <div className="flex items-start gap-2">
+                    <Share2 className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-300 block">Canais:</span>
+                      <span className="text-slate-400 text-[11px]">{camp.channels}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Prontidão:</span>
-                    <span className="text-emerald-400 text-[11px] font-semibold">{camp.readiness}</span>
+
+                  <div className="flex items-start gap-2">
+                    <Target className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-300 block">Próximo Passo:</span>
+                      <span className="text-slate-400 text-[11px]">{camp.next}</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-800 bg-slate-950/40 p-3 rounded-xl">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">
-                  Próxima Ação:
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-[11px]">
+                <span className="text-slate-500 font-mono">{camp.readiness}</span>
+                <span className="text-sky-400 font-bold hover:underline cursor-pointer">
+                  Ver Esteira &rarr;
                 </span>
-                <p className="text-xs text-slate-300 leading-snug">{camp.next}</p>
               </div>
             </article>
           ))}
         </div>
+
+        {/* Modal de Nova Campanha */}
+        {isModalOpen && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+          >
+            <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-5 shadow-2xl relative">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div>
+                <h3 className="text-xl font-bold text-white">Criar Nova Campanha</h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Defina o objetivo, cadência e canais para a nova esteira de publicidade.
+                </p>
+              </div>
+
+              <form onSubmit={handleCreateCampaign} className="space-y-4 text-xs">
+                <div>
+                  <label className="block text-slate-300 font-bold mb-1">Nome da Campanha *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Ex: Escala Q4 2026 • Lançamento de Oferta"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:border-sky-400 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-300 font-bold mb-1">Marca Vinculada</label>
+                  <select
+                    value={formData.brand}
+                    onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-sky-400 focus:outline-none"
+                  >
+                    <option value="HelpUS BR">HelpUS BR</option>
+                    <option value="Advert HelpUS BR">Advert HelpUS BR</option>
+                    <option value="HelpUS CVSS">HelpUS CVSS</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-slate-300 font-bold mb-1">Objetivo Estratégico</label>
+                  <input
+                    type="text"
+                    placeholder="Ex: Geração de leads qualificados para o comercial"
+                    value={formData.objective}
+                    onChange={(e) => setFormData({ ...formData, objective: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:border-sky-400 focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Cadência</label>
+                    <input
+                      type="text"
+                      placeholder="Ex: 3 posts / semana"
+                      value={formData.cadence}
+                      onChange={(e) => setFormData({ ...formData, cadence: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:border-sky-400 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Canais</label>
+                    <input
+                      type="text"
+                      placeholder="LinkedIn, Instagram Ads"
+                      value={formData.channels}
+                      onChange={(e) => setFormData({ ...formData, channels: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:border-sky-400 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-slate-300 font-bold mb-1">Primeiro Passo da Esteira</label>
+                  <input
+                    type="text"
+                    placeholder="Ex: Gerar roteiros dos 3 primeiros vídeos"
+                    value={formData.next}
+                    onChange={(e) => setFormData({ ...formData, next: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:border-sky-400 focus:outline-none"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold shadow-md"
+                  >
+                    Salvar Campanha
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </main>
     </AdminGate>
   );

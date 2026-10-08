@@ -4,7 +4,20 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import AdminGate from '../../components/AdminGate';
 import { useLanguage } from '../../lib/LanguageContext';
-import { FileText, ArrowLeft, Plus, Sparkles, Send } from 'lucide-react';
+import {
+  FileText,
+  ArrowLeft,
+  Plus,
+  Sparkles,
+  Send,
+  CheckCircle2,
+  Share2,
+  Trash2,
+  Check,
+  Layers,
+  Film,
+  Compass,
+} from 'lucide-react';
 
 const initialDrafts = [
   {
@@ -49,12 +62,54 @@ const initialDrafts = [
 ];
 
 export default function DraftsPage() {
-  const [drafts] = useState(initialDrafts);
+  const [drafts, setDrafts] = useState(initialDrafts);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null);
+
+  // Formulário do Gerador IA
+  const [theme, setTheme] = useState('');
+  const [selectedBrand, setSelectedBrand] = useState('HelpUS BR');
+  const [format, setFormat] = useState('Carrossel Visual (7 slides)');
+  const [channel, setChannel] = useState('LinkedIn');
+
   const { t } = useLanguage();
+
+  const handleGenerateAI = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!theme.trim()) return;
+
+    setIsGenerating(true);
+
+    setTimeout(() => {
+      const newDraft = {
+        id: `draft-${Date.now()}`,
+        title: theme.trim(),
+        brand: selectedBrand,
+        channel: channel,
+        format: format,
+        pillar: 'Autoridade & Conversão',
+        status: 'Rascunho Pronto (Gerado IA)',
+        statusColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+        cta: 'Conheça o ecossistema HelpUS e fale no WhatsApp',
+        readiness: 'Copy e estrutura geradas com sucesso',
+        next: 'Enviar para esteira de aprovação Master',
+      };
+
+      setDrafts([newDraft, ...drafts]);
+      setIsGenerating(false);
+      setTheme('');
+      setNotification(`Criativo "${newDraft.title}" gerado com sucesso pelo Motor IA!`);
+      setTimeout(() => setNotification(null), 4000);
+    }, 1200);
+  };
+
+  const handleDelete = (id: string) => {
+    setDrafts(drafts.filter((d) => d.id !== id));
+  };
 
   return (
     <AdminGate>
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <Link
@@ -78,62 +133,168 @@ export default function DraftsPage() {
             </div>
           </div>
 
-          <button className="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md transition flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-300" /> Gerar Rascunho com IA
-          </button>
+          <Link
+            href="/approvals"
+            className="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 shadow-md transition flex items-center gap-2"
+          >
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Ir para Aprovações
+          </Link>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {drafts.map((draft) => (
-            <article
-              key={draft.id}
-              className="bg-slate-900/80 border border-slate-800 hover:border-slate-700 p-6 rounded-2xl flex flex-col justify-between space-y-5 shadow-lg transition"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-800 text-purple-300 border border-slate-700">
-                    {draft.brand}
-                  </span>
-                  <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${draft.statusColor}`}>
-                    {draft.status}
-                  </span>
-                </div>
+        {/* NOTIFICAÇÃO DE SUCESSO */}
+        {notification && (
+          <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold flex items-center gap-2 animate-in fade-in">
+            <Check className="w-4 h-4 shrink-0" />
+            <span>{notification}</span>
+          </div>
+        )}
 
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">
-                    {draft.format}
-                  </span>
-                  <h2 className="text-base font-bold text-white tracking-tight leading-snug">
-                    {draft.title}
-                  </h2>
-                </div>
+        {/* GERADOR DE CRIATIVOS COM IA */}
+        <section className="bg-gradient-to-br from-purple-950/40 via-slate-900 to-slate-950 border-2 border-purple-500/30 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white">Motor IA de Criação de Rascunhos</h2>
+              <p className="text-xs text-slate-400">
+                Gere roteiros, carrosséis ou anúncios completos em segundos com a IA da HelpUS.
+              </p>
+            </div>
+          </div>
 
-                <div className="space-y-2 pt-2 text-xs border-t border-slate-800/80">
+          <form onSubmit={handleGenerateAI} className="space-y-4 text-xs">
+            <div>
+              <label className="block text-slate-300 font-bold mb-1.5">
+                Tema, Gancho ou Briefing do Conteúdo *
+              </label>
+              <textarea
+                rows={2}
+                required
+                placeholder="Ex: Como empresas tradicionais perdem clientes ao demorar dias para aprovar criativos..."
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+                className="w-full px-4 py-3 rounded-2xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:border-purple-400 focus:outline-none resize-none leading-relaxed"
+              />
+            </div>
+
+            <div className="grid sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-slate-300 font-bold mb-1">Marca / Cliente</label>
+                <select
+                  value={selectedBrand}
+                  onChange={(e) => setSelectedBrand(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-purple-400 focus:outline-none"
+                >
+                  <option value="HelpUS BR">HelpUS BR</option>
+                  <option value="Advert HelpUS BR">Advert HelpUS BR</option>
+                  <option value="HelpUS CVSS">HelpUS CVSS</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-bold mb-1">Formato do Criativo</label>
+                <select
+                  value={format}
+                  onChange={(e) => setFormat(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-purple-400 focus:outline-none"
+                >
+                  <option value="Carrossel Visual (7 slides)">Carrossel Visual (7 slides)</option>
+                  <option value="Roteiro de Vídeo (Reels / TikTok)">Roteiro de Vídeo (Reels / TikTok)</option>
+                  <option value="Anúncio de Tráfego Pago (Conversão)">Anúncio de Tráfego Pago (Conversão)</option>
+                  <option value="Artigo & Post Executivo">Artigo & Post Executivo</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-bold mb-1">Canal Principal</label>
+                <select
+                  value={channel}
+                  onChange={(e) => setChannel(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-purple-400 focus:outline-none"
+                >
+                  <option value="LinkedIn">LinkedIn</option>
+                  <option value="Instagram (@helpus.ecommerce)">Instagram</option>
+                  <option value="Meta Ads / Google Search">Meta Ads / Google Search</option>
+                  <option value="Portal Oficial">Portal Oficial</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <button
+                type="submit"
+                disabled={isGenerating}
+                className="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold shadow-lg shadow-purple-600/30 transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>{isGenerating ? 'Gerando com IA...' : '⚡ Gerar Rascunho com IA'}</span>
+              </button>
+            </div>
+          </form>
+        </section>
+
+        {/* LISTAGEM DE RASCUNHOS ATIVOS */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-bold text-white">Rascunhos no Pipeline ({drafts.length})</h2>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {drafts.map((draft) => (
+              <article
+                key={draft.id}
+                className="bg-slate-900/80 border border-slate-800 hover:border-slate-700 p-6 rounded-2xl flex flex-col justify-between space-y-5 shadow-lg transition"
+              >
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Canal:</span>
-                    <span className="font-semibold text-slate-200">{draft.channel}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Pilar Editorial:</span>
-                    <span className="text-sky-400 font-semibold">{draft.pillar}</span>
-                  </div>
-                  <div className="pt-1">
-                    <span className="text-slate-400 block mb-1">CTA (Chamada de Ação):</span>
-                    <span className="text-[11px] text-amber-300 bg-amber-400/10 px-2 py-1 rounded block border border-amber-400/20 font-medium">
-                      "{draft.cta}"
+                    <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-800 text-purple-400 border border-slate-700">
+                      {draft.brand}
+                    </span>
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${draft.statusColor}`}
+                    >
+                      {draft.status}
                     </span>
                   </div>
-                </div>
-              </div>
 
-              <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                <span className="text-[11px] text-emerald-400 font-semibold">{draft.readiness}</span>
-                <button className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition flex items-center gap-1.5">
-                  <Send className="w-3 h-3 text-sky-400" /> Enviar para Aprovação
-                </button>
-              </div>
-            </article>
-          ))}
+                  <h3 className="text-base font-bold text-white leading-snug">{draft.title}</h3>
+
+                  <div className="space-y-1.5 pt-2 text-xs border-t border-slate-800 text-slate-300">
+                    <div className="flex items-center gap-2">
+                      <Layers className="w-3.5 h-3.5 text-purple-400" />
+                      <span>{draft.format}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Share2 className="w-3.5 h-3.5 text-sky-400" />
+                      <span>{draft.channel}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80 text-[11px] space-y-1">
+                    <span className="font-bold text-slate-400 block">Chamada para Ação (CTA):</span>
+                    <p className="text-slate-300 italic">{draft.cta}</p>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
+                  <Link
+                    href="/approvals"
+                    className="text-xs font-bold text-purple-400 hover:underline flex items-center gap-1"
+                  >
+                    <span>Enviar para Aprovação</span>
+                    <Send className="w-3 h-3" />
+                  </Link>
+
+                  <button
+                    onClick={() => handleDelete(draft.id)}
+                    className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-800 transition cursor-pointer"
+                    title="Excluir rascunho"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </main>
     </AdminGate>
