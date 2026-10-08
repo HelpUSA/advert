@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '../lib/LanguageContext';
-import { useGoogleAuth, SUPERADMIN_EMAIL } from '../lib/useGoogleAuth';
+import { useGoogleAuth } from '../lib/useGoogleAuth';
 import {
   Globe,
   ChevronDown,
@@ -15,6 +15,7 @@ import {
   User,
   LogOut,
   Sparkles,
+  Lock,
 } from 'lucide-react';
 
 export default function Header() {
@@ -26,8 +27,19 @@ export default function Header() {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
-  const navItems = [
-    { href: '/', label: t.nav.dashboard },
+  // Links para o visitante público
+  const publicNavItems = [
+    { href: '/', label: t.nav.home },
+    { href: '/#servicos', label: t.nav.services },
+    { href: '/#video', label: 'Vídeo' },
+    { href: '/#cases', label: t.nav.cases },
+    { href: '/#comparativo', label: t.nav.features },
+    { href: '/#contato', label: t.nav.contact },
+  ];
+
+  // Links para o SuperAdmin autenticado
+  const adminNavItems = [
+    { href: '/', label: t.nav.home },
     { href: '/brands', label: t.nav.brands },
     { href: '/campaigns', label: t.nav.campaigns },
     { href: '/calendar', label: t.nav.calendar },
@@ -36,6 +48,8 @@ export default function Header() {
     { href: '/workflow', label: t.nav.workflow },
     { href: '/reports', label: t.nav.reports },
   ];
+
+  const currentNavItems = isAuthenticated ? adminNavItems : publicNavItems;
 
   const languages = [
     { code: 'pt', label: 'Português (BR)', flag: '🇧🇷' },
@@ -63,7 +77,7 @@ export default function Header() {
 
         {/* Menu Desktop */}
         <nav className="hidden xl:flex items-center gap-1">
-          {navItems.map((item) => {
+          {currentNavItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
@@ -123,7 +137,7 @@ export default function Header() {
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs transition"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-xs transition shadow-sm"
               >
                 {user.picture ? (
                   <img
@@ -136,8 +150,8 @@ export default function Header() {
                     SA
                   </div>
                 )}
-                <span className="hidden sm:inline font-semibold text-slate-200 text-xs">
-                  SuperAdmin
+                <span className="hidden sm:inline font-semibold text-emerald-400 text-xs">
+                  {t.auth.connectedAs}
                 </span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               </button>
@@ -154,11 +168,20 @@ export default function Header() {
                     </p>
                   </div>
 
+                  <Link
+                    href="/brands"
+                    onClick={() => setUserMenuOpen(false)}
+                    className="flex items-center justify-between w-full px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-amber-400 transition"
+                  >
+                    <span>Mesa de Operações</span>
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  </Link>
+
                   <a
                     href="https://helpusbr.com/admin"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between w-full px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-sky-400 transition"
+                    className="flex items-center justify-between w-full px-3 py-2 rounded-xl bg-slate-800/60 hover:bg-slate-700 text-xs font-semibold text-sky-400 transition"
                   >
                     <span>{t.nav.backToHub}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -181,11 +204,11 @@ export default function Header() {
             <button
               onClick={login}
               disabled={isLoading}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md transition"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-md transition cursor-pointer"
               title={t.auth.superadminOnly}
             >
-              <User className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{isLoading ? '...' : t.auth.loginWithGoogle}</span>
+              <Lock className="w-3.5 h-3.5 text-blue-200" />
+              <span>{isLoading ? '...' : t.publicLanding.ctaAdmin}</span>
             </button>
           )}
 
@@ -194,7 +217,7 @@ export default function Header() {
             href="https://helpusbr.com/admin"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition"
             title="Acessar o Painel Central HelpUS"
           >
             <span>Hub</span>
@@ -215,7 +238,7 @@ export default function Header() {
       {/* Drawer Mobile */}
       {mobileMenuOpen && (
         <div className="xl:hidden bg-slate-950 border-b border-slate-800 px-6 py-4 space-y-2">
-          {navItems.map((item) => (
+          {currentNavItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -229,7 +252,18 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          <div className="pt-2 border-t border-slate-800">
+          <div className="pt-2 border-t border-slate-800 flex flex-col gap-2">
+            {!isAuthenticated && (
+              <button
+                onClick={() => {
+                  login();
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold text-center"
+              >
+                {t.publicLanding.ctaAdmin}
+              </button>
+            )}
             <a
               href="https://helpusbr.com/admin"
               target="_blank"
