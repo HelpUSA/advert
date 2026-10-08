@@ -20,7 +20,7 @@ Stage 5 - Full Operational AdTech Platform & Production Launch
   - `/drafts`: Motor IA para geração de copys persuasivas e artes fotográficas comerciais realistas (Flux), 3D CyberTech, com modal de preview de alta resolução, regeneração instantânea e download de imagem.
   - `/approvals`: Safety gate pipeline com 1-clique de aprovação, auditoria Master e simulação de disparo direto via API oficial.
   - `/workflow`: Quadro Kanban interativo com movimentação de cards e gates da metodologia HelpUS.
-  - `/reports`: Indicadores executivos com filtros por período (7d, 30d, 90d, 2026) e exportação de CSV em 1-clique.
+  - `/reports`: Indicadores executivos com filtros por período (7d, 30d, 90d, 2026), exportação de CSV, visualizador e emissor de PDF executivo A4 pronto para impressão e compartilhamento via WhatsApp em 1-clique.
   - `/integrations`: Gestão de credenciais Meta Graph API, LinkedIn Ads, Google Ads, testes de webhook, Supabase PostgreSQL e backup em nuvem.
   - Supabase Database Integration: Cliente `@supabase/supabase-js` conectado à tabela `advert_sync` com SQL de migração e fallback em JSON local zero-downtime.
   - Backend API Handlers: `/api/data` (Supabase + fallback local), `/api/webhooks/social` (handshake & ingestor), `/api/ai/generate-image` (gerador fotográfico realista, 3D, DALL-E 3 e layouts vetoriais).
