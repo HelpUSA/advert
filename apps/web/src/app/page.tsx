@@ -15,15 +15,38 @@ import {
   ExternalLink,
   X,
   Check,
+  Calculator,
+  Layers,
+  Film,
+  FileText,
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+  Sliders,
+  HelpCircle,
+  Share2,
 } from 'lucide-react';
 
 export default function Home() {
   const { language, t } = useLanguage();
   const { isAuthenticated } = useGoogleAuth();
 
-  // Estado para o Modal de "Saiba mais" de cada serviço
+  // 1. Estado para o Modal de "Saiba mais" de cada serviço
   const [selectedService, setSelectedService] = useState<any | null>(null);
 
+  // 2. Estado do Simulador de ROI & Orçamento
+  const [budget, setBudget] = useState<number>(5000);
+  const [selectedNiche, setSelectedNiche] = useState<'tech' | 'realestate' | 'services' | 'ecommerce'>('tech');
+
+  // 3. Estado da Vitrine de Criativos & Formatos
+  const [showcaseTab, setShowcaseTab] = useState<'carousel' | 'video' | 'ads' | 'article'>('carousel');
+  const [carouselSlide, setCarouselSlide] = useState<number>(0);
+
+  // 4. Estado do FAQ Accordion
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  // Mensagem geral do WhatsApp
   const whatsappGeneralMsg =
     language === 'en'
       ? 'Hello! I would like to request a commercial proposal for HelpUS Advert services.'
@@ -32,6 +55,40 @@ export default function Home() {
       : 'Olá! Gostaria de solicitar uma proposta comercial para os serviços de publicidade HelpUS Advert.';
 
   const whatsappGeneralUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappGeneralMsg)}`;
+
+  // Cálculos do Simulador
+  const nicheMultipliers = {
+    tech: { reachMult: 45, cpl: 35, roi: '+240%' },
+    realestate: { reachMult: 38, cpl: 50, roi: '+310%' },
+    services: { reachMult: 55, cpl: 28, roi: '+260%' },
+    ecommerce: { reachMult: 70, cpl: 18, roi: '+190%' },
+  };
+
+  const currentNicheData = nicheMultipliers[selectedNiche];
+  const projectedReach = Math.round(budget * currentNicheData.reachMult).toLocaleString(
+    language === 'en' ? 'en-US' : 'pt-BR'
+  );
+  const projectedLeads = Math.round(budget / currentNicheData.cpl).toLocaleString(
+    language === 'en' ? 'en-US' : 'pt-BR'
+  );
+  const projectedRoi = currentNicheData.roi;
+
+  const currencySymbol = language === 'en' ? '$' : 'R$';
+  const formattedBudget = `${currencySymbol} ${budget.toLocaleString(
+    language === 'en' ? 'en-US' : 'pt-BR'
+  )}`;
+
+  const nicheName = t.publicLanding.simulator.niches[selectedNiche];
+  const simulatorWhatsappMsg =
+    language === 'en'
+      ? `Hello! I would like to hire HelpUS Advert for the ${nicheName} niche, with an estimated monthly budget of ${formattedBudget}.`
+      : language === 'es'
+      ? `Hola, me gustaría contratar HelpUS Advert para el nicho ${nicheName}, con un presupuesto mensual estimado de ${formattedBudget}.`
+      : `Olá! Gostaria de contratar a HelpUS Advert para o nicho de ${nicheName}, com orçamento mensal simulado de ${formattedBudget}.`;
+
+  const simulatorWhatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    simulatorWhatsappMsg
+  )}`;
 
   return (
     <main className="space-y-20 sm:space-y-28 py-6 sm:py-10">
@@ -243,7 +300,419 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. CASES & FOTOS DE MARCAS ATENDIDAS */}
+      {/* 3. SIMULADOR COMERCIAL & PROJEÇÃO DE ROI (NOVO RECURSO DE CONVERSÃO) */}
+      <section id="simulador" className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/40 border border-indigo-500/30 rounded-3xl p-6 sm:p-12 shadow-2xl space-y-8">
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-3.5 py-1 rounded-full border border-indigo-500/20 inline-flex items-center gap-1.5">
+              <Calculator className="w-3.5 h-3.5" /> {t.publicLanding.simulator.badge}
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              {t.publicLanding.simulator.title}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto">
+              {t.publicLanding.simulator.subtitle}
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-8 items-center pt-2">
+            {/* Controles do Simulador */}
+            <div className="lg:col-span-7 bg-slate-950/80 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+              {/* Seletor de Orçamento */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                    <Sliders className="w-4 h-4 text-indigo-400" />
+                    <span>{t.publicLanding.simulator.budgetLabel}</span>
+                  </label>
+                  <span className="text-lg font-black text-amber-400 font-mono">
+                    {formattedBudget}
+                  </span>
+                </div>
+
+                <input
+                  type="range"
+                  min="2000"
+                  max="20000"
+                  step="1000"
+                  value={budget}
+                  onChange={(e) => setBudget(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                />
+
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {[2000, 5000, 10000, 15000, 20000].map((b) => (
+                    <button
+                      key={b}
+                      onClick={() => setBudget(b)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition ${
+                        budget === b
+                          ? 'bg-amber-400 text-slate-950 shadow-md'
+                          : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                      }`}
+                    >
+                      {currencySymbol} {b >= 1000 ? `${b / 1000}k` : b}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Seletor de Nicho */}
+              <div className="space-y-3 pt-4 border-t border-slate-800/80">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+                  {t.publicLanding.simulator.nicheLabel}
+                </label>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {(['tech', 'realestate', 'services', 'ecommerce'] as const).map((n) => (
+                    <button
+                      key={n}
+                      onClick={() => setSelectedNiche(n)}
+                      className={`p-3 rounded-xl text-left text-xs font-bold transition border ${
+                        selectedNiche === n
+                          ? 'bg-indigo-600/20 border-indigo-400 text-white shadow-md'
+                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                      }`}
+                    >
+                      {t.publicLanding.simulator.niches[n]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Painel de Resultados & Projeções */}
+            <div className="lg:col-span-5 bg-gradient-to-br from-indigo-950/60 to-slate-950 border-2 border-indigo-500/40 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl">
+              <div>
+                <span className="text-[11px] font-bold text-indigo-400 uppercase tracking-wider block">
+                  {t.publicLanding.simulator.resultsTitle}
+                </span>
+                <h3 className="text-xl font-extrabold text-white mt-1">
+                  {nicheName}
+                </h3>
+              </div>
+
+              <div className="space-y-3.5">
+                <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+                  <span className="text-xs text-slate-400">{t.publicLanding.simulator.reach}</span>
+                  <span className="text-base font-black text-white font-mono">{projectedReach}+</span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+                  <span className="text-xs text-slate-400">{t.publicLanding.simulator.leads}</span>
+                  <span className="text-base font-black text-amber-400 font-mono">~{projectedLeads}</span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+                  <span className="text-xs text-slate-400">{t.publicLanding.simulator.roi}</span>
+                  <span className="text-base font-black text-emerald-400 font-mono">{projectedRoi}</span>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <div className="flex items-center gap-2 text-xs text-slate-300 pb-4">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>{t.publicLanding.simulator.approvalGuarantee}</span>
+                </div>
+
+                <a
+                  href={simulatorWhatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm shadow-xl shadow-emerald-500/25 transition flex items-center justify-center gap-2 group"
+                >
+                  <MessageCircle className="w-4 h-4 fill-slate-950" />
+                  <span>{t.publicLanding.simulator.ctaButton}</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+                </a>
+              </div>
+
+              <p className="text-[10px] text-slate-500 text-center leading-relaxed">
+                {t.publicLanding.simulator.disclaimer}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. VITRINE DE FORMATOS & CRIATIVOS (SHOWCASE INTERATIVO) */}
+      <section id="formatos" className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <span className="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-3.5 py-1 rounded-full border border-purple-500/20 inline-flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5" /> {t.publicLanding.showcase.badge}
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+            {t.publicLanding.showcase.title}
+          </h2>
+          <p className="text-sm sm:text-base text-slate-400">
+            {t.publicLanding.showcase.subtitle}
+          </p>
+        </div>
+
+        {/* Abas dos Formatos */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5">
+          {[
+            { id: 'carousel', label: t.publicLanding.showcase.tabs.carousel, icon: Layers },
+            { id: 'video', label: t.publicLanding.showcase.tabs.video, icon: Film },
+            { id: 'ads', label: t.publicLanding.showcase.tabs.ads, icon: Sparkles },
+            { id: 'article', label: t.publicLanding.showcase.tabs.article, icon: FileText },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = showcaseTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setShowcaseTab(tab.id as any)}
+                className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition cursor-pointer border ${
+                  isActive
+                    ? 'bg-purple-600 text-white border-purple-500 shadow-lg shadow-purple-600/30'
+                    : 'bg-slate-900 text-slate-400 hover:text-white border-slate-800'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Conteúdo Dinâmico da Aba Selecionada */}
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl">
+          {showcaseTab === 'carousel' && (
+            <div className="grid lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-6 space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded">
+                  Instagram & LinkedIn Carousels
+                </span>
+                <h3 className="text-2xl font-black text-white">
+                  {t.publicLanding.showcase.carousel.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  {t.publicLanding.showcase.carousel.desc}
+                </p>
+
+                <div className="flex items-center gap-3 pt-2">
+                  <button
+                    onClick={() => setCarouselSlide((prev) => (prev > 0 ? prev - 1 : 3))}
+                    className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white transition border border-slate-700"
+                    aria-label="Slide anterior"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <span className="text-xs font-mono text-slate-400">
+                    Slide {carouselSlide + 1} / 4
+                  </span>
+                  <button
+                    onClick={() => setCarouselSlide((prev) => (prev < 3 ? prev + 1 : 0))}
+                    className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white transition border border-slate-700"
+                    aria-label="Próximo slide"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="lg:col-span-6 bg-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-4 shadow-xl">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src="/img/helpus-logo.png"
+                      alt="HelpUS"
+                      className="w-5 h-5 rounded-full object-contain"
+                    />
+                    <span className="text-xs font-bold text-white">HelpUS Advert • Slide Viewer</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded">
+                    SLIDE 0{carouselSlide + 1}
+                  </span>
+                </div>
+
+                <div className="min-h-[160px] flex flex-col justify-center space-y-2">
+                  <h4 className="text-base sm:text-lg font-bold text-amber-400">
+                    {t.publicLanding.showcase.carousel.slides[carouselSlide].title}
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                    {t.publicLanding.showcase.carousel.slides[carouselSlide].text}
+                  </p>
+                </div>
+
+                <div className="flex gap-1.5 pt-3 border-t border-slate-800/80">
+                  {[0, 1, 2, 3].map((s) => (
+                    <div
+                      key={s}
+                      onClick={() => setCarouselSlide(s)}
+                      className={`h-1.5 flex-1 rounded-full cursor-pointer transition ${
+                        carouselSlide === s ? 'bg-purple-500' : 'bg-slate-800'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showcaseTab === 'video' && (
+            <div className="grid lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-5 space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-pink-400 bg-pink-500/10 px-2.5 py-1 rounded">
+                  Reels, Shorts & TikTok Scripts
+                </span>
+                <h3 className="text-2xl font-black text-white">
+                  {t.publicLanding.showcase.video.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  {t.publicLanding.showcase.video.desc}
+                </p>
+              </div>
+
+              <div className="lg:col-span-7 bg-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-4 shadow-xl">
+                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                  <span className="text-[11px] font-bold text-pink-400 uppercase tracking-wider block">
+                    {t.publicLanding.showcase.video.hookTitle}
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-200 italic">
+                    {t.publicLanding.showcase.video.hookText}
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                  <span className="text-[11px] font-bold text-sky-400 uppercase tracking-wider block">
+                    {t.publicLanding.showcase.video.bodyTitle}
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-200">
+                    {t.publicLanding.showcase.video.bodyText}
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                  <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider block">
+                    {t.publicLanding.showcase.video.ctaTitle}
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-200 font-semibold">
+                    {t.publicLanding.showcase.video.ctaText}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showcaseTab === 'ads' && (
+            <div className="grid lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-5 space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded">
+                  Paid Traffic & Precision Ads
+                </span>
+                <h3 className="text-2xl font-black text-white">
+                  {t.publicLanding.showcase.ads.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  {t.publicLanding.showcase.ads.desc}
+                </p>
+              </div>
+
+              <div className="lg:col-span-7 bg-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-4 shadow-xl">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src="/img/helpus-logo.png"
+                      alt="HelpUS"
+                      className="w-5 h-5 rounded-full object-contain"
+                    />
+                    <span className="text-xs font-bold text-white">HelpUS • Patrocinado</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
+                    CONVERSÃO
+                  </span>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="text-base font-extrabold text-white">
+                    {t.publicLanding.showcase.ads.headlineText}
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    {t.publicLanding.showcase.ads.copyText}
+                  </p>
+                </div>
+
+                <div className="pt-2">
+                  <span className="inline-block px-4 py-2 rounded-lg bg-emerald-500 text-slate-950 font-bold text-xs shadow-md">
+                    {t.publicLanding.showcase.ads.ctaTag}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showcaseTab === 'article' && (
+            <div className="grid lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-5 space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-sky-400 bg-sky-500/10 px-2.5 py-1 rounded">
+                  Thought Leadership & Executive PR
+                </span>
+                <h3 className="text-2xl font-black text-white">
+                  {t.publicLanding.showcase.article.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  {t.publicLanding.showcase.article.desc}
+                </p>
+              </div>
+
+              <div className="lg:col-span-7 bg-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-4 shadow-xl">
+                <div className="space-y-1 border-b border-slate-800 pb-3">
+                  <span className="text-[11px] font-bold text-sky-400 uppercase tracking-wider">
+                    {t.publicLanding.showcase.article.themeTitle}
+                  </span>
+                  <h4 className="text-base sm:text-lg font-bold text-white">
+                    {t.publicLanding.showcase.article.themeText}
+                  </h4>
+                </div>
+
+                <div className="space-y-1 pt-1">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    {t.publicLanding.showcase.article.focusTitle}
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    {t.publicLanding.showcase.article.focusText}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 5. COMO FUNCIONA (CICLO OPERACIONAL EM 4 ETAPAS) */}
+      <section id="como-funciona" className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <span className="text-xs font-bold uppercase tracking-wider text-sky-400 bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20 inline-block">
+            {t.publicLanding.howItWorks.badge}
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+            {t.publicLanding.howItWorks.title}
+          </h2>
+          <p className="text-sm sm:text-base text-slate-400">
+            {t.publicLanding.howItWorks.subtitle}
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {t.publicLanding.howItWorks.steps.map((step, idx) => (
+            <div
+              key={idx}
+              className="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between space-y-4 shadow-lg relative overflow-hidden"
+            >
+              <div className="space-y-3">
+                <span className="text-3xl font-black text-slate-700 font-mono block">
+                  {step.num}
+                </span>
+                <h3 className="text-base font-bold text-white">{step.title}</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">{step.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 6. CASES & FOTOS DE MARCAS ATENDIDAS */}
       <section id="cases" className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full border border-emerald-400/20 inline-block">
@@ -287,7 +756,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. TABELA COMPARATIVA: AGÊNCIA TRADICIONAL vs HELPUS ADVERT */}
+      {/* 7. TABELA COMPARATIVA: AGÊNCIA TRADICIONAL vs HELPUS ADVERT */}
       <section id="comparativo" className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-12 shadow-2xl space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
@@ -325,7 +794,51 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. BANNER DE CONTRATAÇÃO & CONTATO VIA WHATSAPP */}
+      {/* 8. PERGUNTAS FREQUENTES (FAQ INTERATIVO) */}
+      <section id="faq" className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8">
+        <div className="text-center space-y-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20 inline-flex items-center gap-1.5">
+            <HelpCircle className="w-3.5 h-3.5" /> {t.publicLanding.faq.badge}
+          </span>
+          <h2 className="text-3xl font-black text-white tracking-tight">
+            {t.publicLanding.faq.title}
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400">
+            {t.publicLanding.faq.subtitle}
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {t.publicLanding.faq.items.map((item, idx) => {
+            const isOpen = openFaq === idx;
+            return (
+              <div
+                key={idx}
+                className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden transition"
+              >
+                <button
+                  onClick={() => setOpenFaq(isOpen ? null : idx)}
+                  className="w-full p-5 text-left flex items-center justify-between gap-4 text-white hover:text-amber-400 transition cursor-pointer"
+                >
+                  <span className="font-bold text-sm sm:text-base">{item.q}</span>
+                  {isOpen ? (
+                    <ChevronUp className="w-5 h-5 text-amber-400 shrink-0" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
+                  )}
+                </button>
+                {isOpen && (
+                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 animate-in fade-in duration-200">
+                    {item.a}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 9. BANNER DE CONTRATAÇÃO & CONTATO VIA WHATSAPP */}
       <section id="contato" className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="bg-gradient-to-r from-emerald-600/20 via-slate-900 to-amber-500/20 border-2 border-emerald-500/40 rounded-3xl p-8 sm:p-14 text-center space-y-6 shadow-2xl relative overflow-hidden">
           <div className="max-w-2xl mx-auto space-y-3">
@@ -361,7 +874,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. MODAL INTERATIVO DE DETALHES DO SERVIÇO ("SAIBA MAIS") */}
+      {/* 10. MODAL INTERATIVO DE DETALHES DO SERVIÇO ("SAIBA MAIS") */}
       {selectedService && (
         <div
           role="dialog"
@@ -371,7 +884,7 @@ export default function Home() {
           <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-6 shadow-2xl relative">
             <button
               onClick={() => setSelectedService(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition"
+              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer"
               aria-label="Fechar"
             >
               <X className="w-5 h-5" />
@@ -420,7 +933,7 @@ export default function Home() {
 
               <button
                 onClick={() => setSelectedService(null)}
-                className="py-3.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs border border-slate-700 transition"
+                className="py-3.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs border border-slate-700 transition cursor-pointer"
               >
                 {t.publicLanding.close}
               </button>

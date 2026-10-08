@@ -31,8 +31,10 @@ export default function Header() {
   const publicNavItems = [
     { href: '/', label: t.nav.home },
     { href: '/#servicos', label: t.nav.services },
+    { href: '/#simulador', label: t.nav.simulator },
+    { href: '/#formatos', label: t.nav.showcase },
     { href: '/#cases', label: t.nav.cases },
-    { href: '/#comparativo', label: t.nav.features },
+    { href: '/#faq', label: t.nav.faq },
   ];
 
   // Links para o SuperAdmin autenticado
