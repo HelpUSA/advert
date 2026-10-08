@@ -1,26 +1,146 @@
-﻿const steps = [
- { name: '1. Register profile', owner: 'Manager + watcher', status: 'active', gate: 'Brand gate', output: 'BrandProfile with goal, audience, offer, tone and constraints.', next: 'Use profile to create campaigns' },
- { name: '2. Plan campaign', owner: 'Manager + watcher', status: 'active', gate: 'Campaign gate', output: 'Campaign with objective, channels, cadence and readiness.', next: 'Convert campaign into calendar slots' },
- { name: '3. Create drafts', owner: 'Watcher', status: 'active', gate: 'Draft gate', output: 'ContentDrafts, variants and asset briefs.', next: 'Send ready drafts to approval' },
- { name: '4. Review approvals', owner: 'Manager', status: 'gated', gate: 'Approval gate', output: 'Approved, rejected or changes requested decisions.', next: 'Only approved drafts can become publishing tasks' },
- { name: '5. Prepare publishing', owner: 'Watcher', status: 'blocked until policy', gate: 'Channel policy gate', output: 'PublishingTask checklist and audit log.', next: 'Manual checklist first, connectors later' },
- { name: '6. Report results', owner: 'Watcher', status: 'planned', gate: 'Audit gate', output: 'Weekly report with wins, issues and next actions.', next: 'Feed insights back into campaigns' },
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
+import { GitBranch, ArrowLeft, Shield, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+
+const steps = [
+  {
+    step: '01',
+    name: 'Cadastro & Posicionamento de Marca',
+    owner: 'SuperAdmin + IA Watcher',
+    status: 'Operacional',
+    gate: 'Validação de Marca',
+    output: 'Perfil de marca com objetivos, tom de voz, público-alvo e limites de comunicação.',
+    next: 'Base para estruturar campanhas',
+  },
+  {
+    step: '02',
+    name: 'Planejamento de Campanha',
+    owner: 'SuperAdmin + IA Watcher',
+    status: 'Operacional',
+    gate: 'Validação de Mídia',
+    output: 'Metas de alcance, canais definidos, cadência semanal e critérios de prontidão.',
+    next: 'Conversão em slots no calendário editorial',
+  },
+  {
+    step: '03',
+    name: 'Geração de Criativos & Copies',
+    owner: 'IA Watcher',
+    status: 'Operacional',
+    gate: 'Filtro de Criativo',
+    output: 'Textos persuasivos, briefings visuais, variantes e chamadas de ação (CTAs).',
+    next: 'Encaminhamento para esteira de aprovação',
+  },
+  {
+    step: '04',
+    name: 'Governança & Aprovação Executiva',
+    owner: 'SuperAdmin Master',
+    status: 'Obrigatório (Gate)',
+    gate: 'Aprovação Master',
+    output: 'Decisões vinculadas de aprovação, solicitação de ajustes ou recusa com registro.',
+    next: 'Apenas conteúdos aprovados avançam para veiculação',
+  },
+  {
+    step: '05',
+    name: 'Preparação & Disparo Multicanal',
+    owner: 'Operador / Watcher',
+    status: 'Ativo',
+    gate: 'Auditoria de Disparo',
+    output: 'Checklist de postagem, agendamento em canais próprios e log de auditoria.',
+    next: 'Veiculação e monitoramento em tempo real',
+  },
+  {
+    step: '06',
+    name: 'Consolidação de Dados & ROI',
+    owner: 'IA Watcher',
+    status: 'Analítico',
+    gate: 'Auditoria de Resultados',
+    output: 'Relatórios consolidados de conversão, engajamento e insights estratégicos.',
+    next: 'Retroalimentação de campanhas futuras',
+  },
 ];
 
-export default function Page() {
- return (
- <main className='page'>
- <section className='hero compact'>
- <p className='eyebrow'>Advert module</p>
- <h1>Watcher workflow</h1>
- <p className='lead'>The workflow defines how watcher can safely support promotion without bypassing approvals, logs or channel policies.</p>
- <div className='statusbar'><span>6 steps</span><span>approval gated</span><span>manual publishing first</span><span>audit required</span></div>
- </section>
- <h2 className='sectiontitle'>Operational flow</h2>
- <section className='grid'>
- {steps.map((step) => <article className='card' key={step.name}><p className='eyebrow'>{step.status} - {step.gate}</p><h2>{step.name}</h2><p><strong>Owner:</strong> {step.owner}</p><p><strong>Output:</strong> {step.output}</p><p><strong>Next:</strong> {step.next}</p></article>)}
- </section>
- <div className='modulehint'>Next backend version: turn each step into auditable watcher tasks with status, command id, input summary and output summary.</div>
- </main>
- );
+export default function WorkflowPage() {
+  return (
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-8">
+      {/* Topo / Voltar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-400 transition mb-2"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> Voltar ao Dashboard
+          </Link>
+          <div className="flex items-center gap-2.5">
+            <div className="p-2.5 rounded-2xl bg-blue-400/10 text-blue-400 border border-blue-400/20">
+              <GitBranch className="w-6 h-6" />
+            </div>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                Fluxo Operacional & IA Watcher
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-400">
+                Esteira de automação ponta a ponta com portões de segurança e conformidade corporativa
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300">
+          <Shield className="w-4 h-4 text-sky-400" />
+          <span>Esteira Segura com Portão de Aprovação</span>
+        </div>
+      </div>
+
+      {/* Grade de Passos do Workflow */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {steps.map((item) => (
+          <article
+            key={item.step}
+            className="bg-slate-900/80 border border-slate-800 hover:border-slate-700 p-6 rounded-2xl flex flex-col justify-between space-y-5 shadow-lg transition"
+          >
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-sm font-black text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded-lg border border-amber-400/20">
+                  Etapa {item.step}
+                </span>
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                  {item.status}
+                </span>
+              </div>
+
+              <div>
+                <h2 className="text-base font-bold text-white tracking-tight">{item.name}</h2>
+                <p className="text-xs text-sky-400 font-semibold mt-1">
+                  Portão: {item.gate}
+                </p>
+              </div>
+
+              <div className="p-3 bg-slate-950/60 border border-slate-800 rounded-xl space-y-2 text-xs">
+                <div>
+                  <span className="text-slate-400 font-semibold block">Entrega Gerada:</span>
+                  <span className="text-slate-200 text-[11px] leading-relaxed block">
+                    {item.output}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-semibold block">Responsável:</span>
+                  <span className="text-slate-300">{item.owner}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-800 text-xs text-slate-400">
+              <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">
+                Próximo passo:
+              </span>
+              <p className="text-slate-300 text-[11px]">{item.next}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </main>
+  );
 }
