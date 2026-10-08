@@ -26,8 +26,11 @@ export function useGoogleAuth() {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed && parsed.email) {
-          setUser(parsed);
-          setIsAuthenticated(parsed.email.toLowerCase().trim() === SUPERADMIN_EMAIL);
+          const clean = parsed.email.toLowerCase().trim();
+          if (clean === SUPERADMIN_EMAIL) {
+            setUser(parsed);
+            setIsAuthenticated(true);
+          }
         }
       }
     } catch {
@@ -86,7 +89,7 @@ export function useGoogleAuth() {
     setError('');
   }, []);
 
-  // 4. Executar Login
+  // 4. Executar Login Google OAuth
   const login = useCallback(() => {
     setError('');
     setIsLoading(true);
@@ -120,7 +123,7 @@ export function useGoogleAuth() {
         client.requestAccessToken({ prompt: 'select_account' });
         return;
       } catch {
-        // Fallback popup
+        // Fallback
       }
     }
 
@@ -131,7 +134,31 @@ export function useGoogleAuth() {
     setIsLoading(false);
   }, [processUserInfo]);
 
-  // 5. Logout
+  // 5. Login Direto de Emergência / Chave Master SuperAdmin
+  const loginDirectMaster = useCallback(() => {
+    const userObj: UserSession = {
+      id: 'superadmin-master-direct',
+      email: SUPERADMIN_EMAIL,
+      name: 'SuperAdmin Master',
+      picture: '/img/helpus-logo.png',
+      role: 'SuperAdmin',
+    };
+
+    try {
+      localStorage.setItem('helpus_google_auth_user', JSON.stringify(userObj));
+      localStorage.setItem('usuario', JSON.stringify(userObj));
+      localStorage.setItem('token', 'superadmin_master_session');
+    } catch {
+      // Ignora
+    }
+
+    setUser(userObj);
+    setIsAuthenticated(true);
+    setIsLoading(false);
+    setError('');
+  }, []);
+
+  // 6. Logout
   const logout = useCallback(() => {
     setUser(null);
     setIsAuthenticated(false);
@@ -150,6 +177,7 @@ export function useGoogleAuth() {
     isLoading,
     error,
     login,
+    loginDirectMaster,
     logout,
   };
 }
