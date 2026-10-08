@@ -15,7 +15,7 @@ const reports = [
     status: 'Concluído',
     wins: 'Mesa de operações própria implementada, eliminando custos com intermediários e agências terceiras.',
     issues: 'Refinar conectores diretos de API social para publicação 1-clique.',
-    next: 'Expandir esteira de criativos automáticos com IA Watcher.',
+    next: 'Expandir esteira de criativos automáticos com IA de Publicidade HelpUS.',
   },
   {
     id: 'rep-2',

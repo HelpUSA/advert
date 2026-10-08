@@ -30,7 +30,7 @@ const initialDrafts = [
     status: 'Em Criação',
     statusColor: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
     cta: 'Solicitar diagnóstico gratuito no portal helpusbr.com',
-    readiness: 'Estruturação dos slides com IA Watcher',
+    readiness: 'Estruturação dos slides com IA Criativa HelpUS',
     next: 'Gerar artes visuais finais com a paleta Dark HelpUS',
   },
   {
@@ -72,7 +72,7 @@ export default function DraftsPage() {
                   {t.nav.drafts}
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-400">
-                  Rascunhos e criativos de conteúdo gerados com IA Watcher
+                  Rascunhos e criativos de conteúdo gerados com IA Criativa HelpUS
                 </p>
               </div>
             </div>

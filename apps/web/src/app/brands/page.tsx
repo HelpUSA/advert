@@ -22,7 +22,7 @@ const initialBrands = [
     name: 'Advert HelpUS BR',
     type: 'Produto Proprietário',
     status: 'Operacional',
-    goal: 'Mesa de operações de marketing orientada a eventos e IA Watcher para canais próprios.',
+    goal: 'Mesa de operações de marketing orientada a eventos e Motor IA Criativo para canais próprios.',
     audience: 'Gestores internos, analistas de mídia e marcas assistidas.',
     offer: 'Operações de publicidade sem intermediários.',
     channels: ['advert.helpusbr.com', 'Docs', 'LinkedIn'],

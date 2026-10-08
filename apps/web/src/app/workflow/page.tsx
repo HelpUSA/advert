@@ -10,7 +10,7 @@ const steps = [
   {
     step: '01',
     name: 'Cadastro & Posicionamento de Marca',
-    owner: 'SuperAdmin + IA Watcher',
+    owner: 'SuperAdmin + Motor IA',
     status: 'Operacional',
     gate: 'Validação de Marca',
     output: 'Perfil de marca com objetivos, tom de voz, público-alvo e limites de comunicação.',
@@ -19,7 +19,7 @@ const steps = [
   {
     step: '02',
     name: 'Planejamento de Campanha',
-    owner: 'SuperAdmin + IA Watcher',
+    owner: 'SuperAdmin + Motor IA',
     status: 'Operacional',
     gate: 'Validação de Mídia',
     output: 'Metas de alcance, canais definidos, cadência semanal e critérios de prontidão.',
@@ -28,7 +28,7 @@ const steps = [
   {
     step: '03',
     name: 'Geração de Criativos & Copies',
-    owner: 'IA Watcher',
+    owner: 'Motor IA Criativo',
     status: 'Operacional',
     gate: 'Filtro de Criativo',
     output: 'Textos persuasivos, briefings visuais, variantes e chamadas de ação (CTAs).',
@@ -46,7 +46,7 @@ const steps = [
   {
     step: '05',
     name: 'Preparação & Disparo Multicanal',
-    owner: 'Operador / Watcher',
+    owner: 'Operador / Automação',
     status: 'Ativo',
     gate: 'Auditoria de Disparo',
     output: 'Checklist de postagem, agendamento em canais próprios e log de auditoria.',
@@ -55,7 +55,7 @@ const steps = [
   {
     step: '06',
     name: 'Consolidação de Dados & ROI',
-    owner: 'IA Watcher',
+    owner: 'Motor IA Analytics',
     status: 'Analítico',
     gate: 'Auditoria de Resultados',
     output: 'Relatórios consolidados de conversão, engajamento e insights estratégicos.',
