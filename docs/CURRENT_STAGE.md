@@ -21,8 +21,9 @@ Stage 5 - Full Operational AdTech Platform & Production Launch
   - `/approvals`: Safety gate pipeline with 1-click approvals, rejection handling, and live social API dispatch simulation.
   - `/workflow`: Interactive Kanban board with stage progression and methodology safety gates toggle.
   - `/reports`: Executive business indicators with period filters (7d, 30d, 90d, 2026) and 1-click CSV report export.
-  - `/integrations`: API credentials management (Meta Graph API, LinkedIn Ads, Google Ads), webhook handshake testing, and cloud server sync.
-  - Backend API Handlers: `/api/data` (cloud persistence & JSON disk fallback), `/api/webhooks/social` (handshake & ingestion), `/api/ai/generate-image` (SVG/PNG visual generation).
+  - `/integrations`: API credentials management (Meta Graph API, LinkedIn Ads, Google Ads), webhook handshake testing, Supabase / PostgreSQL configuration, and cloud server sync.
+  - Supabase Database Integration: `@supabase/supabase-js` client connected to `advert_sync` table with migration SQL and zero-downtime local JSON fallback.
+  - Backend API Handlers: `/api/data` (Supabase + JSON disk fallback), `/api/webhooks/social` (handshake & ingestion), `/api/ai/generate-image` (SVG/PNG visual generation).
   - Client persistence via `localStorage` with SSR fallback and cloud server sync.
 
 ## Production Status
