@@ -17,14 +17,14 @@ Stage 5 - Full Operational AdTech Platform & Production Launch
   - `/brands`: Interactive brand directory with real-time search and creation modal.
   - `/campaigns`: Multichannel campaign pipeline with real-time search and creation modal.
   - `/calendar`: Interactive monthly calendar grid for October 2026, channel filters, and scheduling modal.
-  - `/drafts`: Interactive AI creative generator with real-time copy synthesis, visual card preview canvas, and direct approval pipeline integration.
-  - `/approvals`: Safety gate pipeline with 1-click approvals, rejection handling, and live social API dispatch simulation.
-  - `/workflow`: Interactive Kanban board with stage progression and methodology safety gates toggle.
-  - `/reports`: Executive business indicators with period filters (7d, 30d, 90d, 2026) and 1-click CSV report export.
-  - `/integrations`: API credentials management (Meta Graph API, LinkedIn Ads, Google Ads), webhook handshake testing, Supabase / PostgreSQL configuration, and cloud server sync.
-  - Supabase Database Integration: `@supabase/supabase-js` client connected to `advert_sync` table with migration SQL and zero-downtime local JSON fallback.
-  - Backend API Handlers: `/api/data` (Supabase + JSON disk fallback), `/api/webhooks/social` (handshake & ingestion), `/api/ai/generate-image` (SVG/PNG visual generation).
-  - Client persistence via `localStorage` with SSR fallback and cloud server sync.
+  - `/drafts`: Motor IA para geração de copys persuasivas e artes fotográficas comerciais realistas (Flux), 3D CyberTech, com modal de preview de alta resolução, regeneração instantânea e download de imagem.
+  - `/approvals`: Safety gate pipeline com 1-clique de aprovação, auditoria Master e simulação de disparo direto via API oficial.
+  - `/workflow`: Quadro Kanban interativo com movimentação de cards e gates da metodologia HelpUS.
+  - `/reports`: Indicadores executivos com filtros por período (7d, 30d, 90d, 2026) e exportação de CSV em 1-clique.
+  - `/integrations`: Gestão de credenciais Meta Graph API, LinkedIn Ads, Google Ads, testes de webhook, Supabase PostgreSQL e backup em nuvem.
+  - Supabase Database Integration: Cliente `@supabase/supabase-js` conectado à tabela `advert_sync` com SQL de migração e fallback em JSON local zero-downtime.
+  - Backend API Handlers: `/api/data` (Supabase + fallback local), `/api/webhooks/social` (handshake & ingestor), `/api/ai/generate-image` (gerador fotográfico realista, 3D, DALL-E 3 e layouts vetoriais).
+  - Persistência híbrida via `localStorage`, réplica em disco local e sincronização com Supabase.
 
 ## Production Status
 - **Domain**: [https://advert.helpusbr.com](https://advert.helpusbr.com)

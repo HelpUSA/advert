@@ -19,6 +19,10 @@ import {
   X,
   Download,
   Image as ImageIcon,
+  RefreshCw,
+  Camera,
+  Boxes,
+  Palette,
 } from 'lucide-react';
 
 interface Draft {
@@ -34,6 +38,9 @@ interface Draft {
   readiness: string;
   next: string;
   generatedImageTheme?: string;
+  imageUrl?: string;
+  imageStyle?: string;
+  engine?: string;
 }
 
 const initialDrafts: Draft[] = [
@@ -50,6 +57,9 @@ const initialDrafts: Draft[] = [
     readiness: 'Pronto para fila de aprovação',
     next: 'Encaminhar ao SuperAdmin para validação final',
     generatedImageTheme: 'from-blue-950 via-slate-900 to-indigo-950',
+    imageUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1080&auto=format&fit=crop&q=80',
+    imageStyle: 'realistic_photo',
+    engine: 'HelpUS Real-Photo AI Engine',
   },
   {
     id: 'draft-2',
@@ -64,6 +74,9 @@ const initialDrafts: Draft[] = [
     readiness: 'Estruturação dos slides com IA Criativa HelpUS',
     next: 'Gerar artes visuais finais com a paleta Dark HelpUS',
     generatedImageTheme: 'from-amber-950/60 via-slate-900 to-slate-950',
+    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1080&auto=format&fit=crop&q=80',
+    imageStyle: 'tech_3d',
+    engine: 'HelpUS 3D CyberTech AI Engine',
   },
   {
     id: 'draft-3',
@@ -78,12 +91,16 @@ const initialDrafts: Draft[] = [
     readiness: 'Aguardando decisão de aprovação',
     next: 'Validar copy técnica e disparar nos canais',
     generatedImageTheme: 'from-purple-950/60 via-slate-900 to-slate-950',
+    imageUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1080&auto=format&fit=crop&q=80',
+    imageStyle: 'tech_3d',
+    engine: 'HelpUS 3D CyberTech AI Engine',
   },
 ];
 
 export default function DraftsPage() {
   const [drafts, setDrafts] = useState<Draft[]>(initialDrafts);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isRegeneratingImage, setIsRegeneratingImage] = useState(false);
   const [notification, setNotification] = useState<string | null>(null);
   const [previewDraft, setPreviewDraft] = useState<Draft | null>(null);
 
@@ -92,8 +109,11 @@ export default function DraftsPage() {
   const [selectedBrand, setSelectedBrand] = useState('HelpUS BR');
   const [format, setFormat] = useState('Carrossel Visual (7 slides)');
   const [channel, setChannel] = useState('LinkedIn');
+  const [visualStyle, setVisualStyle] = useState<'realistic_photo' | 'tech_3d' | 'vector_dark'>('realistic_photo');
 
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const isEn = language === 'en';
+  const isEs = language === 'es';
 
   useEffect(() => {
     try {
@@ -111,21 +131,28 @@ export default function DraftsPage() {
     } catch {}
   };
 
-  const handleGenerateAI = (e: React.FormEvent) => {
+  const handleGenerateAI = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!theme.trim()) return;
 
     setIsGenerating(true);
 
-    const gradientThemes = [
-      'from-blue-950 via-slate-900 to-indigo-950',
-      'from-purple-950/60 via-slate-900 to-slate-950',
-      'from-emerald-950/60 via-slate-900 to-slate-950',
-      'from-amber-950/60 via-slate-900 to-slate-950',
-    ];
-    const randomTheme = gradientThemes[Math.floor(Math.random() * gradientThemes.length)];
+    try {
+      // Chamada real ao endpoint de IA Gerativa de Imagem & Layout
+      const imgRes = await fetch('/api/ai/generate-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: theme.trim(),
+          brand: selectedBrand,
+          format: format,
+          channel: channel,
+          style: visualStyle,
+        }),
+      });
 
-    setTimeout(() => {
+      const imgData = await imgRes.json();
+
       const newDraft: Draft = {
         id: `draft-${Date.now()}`,
         title: theme.trim(),
@@ -136,19 +163,55 @@ export default function DraftsPage() {
         status: 'Rascunho Pronto (Gerado IA)',
         statusColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
         cta: 'Conheça o ecossistema HelpUS e fale no WhatsApp',
-        readiness: 'Copy e arte visual geradas com sucesso',
+        readiness: 'Copy e arte fotográfica geradas com sucesso',
         next: 'Enviar para esteira de aprovação Master',
-        generatedImageTheme: randomTheme,
+        generatedImageTheme: 'from-blue-950 via-slate-900 to-indigo-950',
+        imageUrl: imgData.imageUrl || undefined,
+        imageStyle: visualStyle,
+        engine: imgData.engine || 'HelpUS Real-Photo AI Engine',
       };
 
       const updated = [newDraft, ...drafts];
       saveDrafts(updated);
-      setIsGenerating(false);
       setTheme('');
-      setNotification(`Criativo e Arte Visual "${newDraft.title}" gerados com sucesso!`);
+      setNotification(`Criativo e Arte "${newDraft.title}" gerados com sucesso pela IA!`);
       setPreviewDraft(newDraft);
       setTimeout(() => setNotification(null), 5000);
-    }, 1200);
+    } catch (err: any) {
+      alert(`Falha ao gerar com IA: ${err.message}`);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleRegenerateArt = async (draft: Draft) => {
+    setIsRegeneratingImage(true);
+    try {
+      const imgRes = await fetch('/api/ai/generate-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: draft.title,
+          brand: draft.brand,
+          format: draft.format,
+          channel: draft.channel,
+          style: draft.imageStyle || 'realistic_photo',
+        }),
+      });
+      const imgData = await imgRes.json();
+      if (imgData.success && imgData.imageUrl) {
+        const updated = drafts.map((d) =>
+          d.id === draft.id ? { ...d, imageUrl: imgData.imageUrl, engine: imgData.engine } : d
+        );
+        saveDrafts(updated);
+        const updatedTarget = { ...draft, imageUrl: imgData.imageUrl, engine: imgData.engine };
+        setPreviewDraft(updatedTarget);
+      }
+    } catch (err: any) {
+      alert('Erro ao regenerar arte: ' + err.message);
+    } finally {
+      setIsRegeneratingImage(false);
+    }
   };
 
   const handleDelete = (id: string) => {
@@ -175,7 +238,7 @@ export default function DraftsPage() {
                   {t.nav.drafts}
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-400">
-                  Rascunhos e criativos de conteúdo gerados com IA Criativa HelpUS
+                  Rascunhos, copys e artes fotográficas geradas com IA Criativa HelpUS
                 </p>
               </div>
             </div>
@@ -199,16 +262,23 @@ export default function DraftsPage() {
 
         {/* GERADOR DE CRIATIVOS COM IA */}
         <section className="bg-gradient-to-br from-purple-950/40 via-slate-900 to-slate-950 border-2 border-purple-500/30 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
-              <Sparkles className="w-5 h-5" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-white">Motor IA de Criação de Rascunhos & Artes</h2>
+                <p className="text-xs text-slate-400">
+                  Gere cópias persuasivas e imagens fotográficas realistas instantâneas com a IA da HelpUS.
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-lg font-bold text-white">Motor IA de Criação de Rascunhos & Artes</h2>
-              <p className="text-xs text-slate-400">
-                Gere roteiros, carrosséis, anúncios e prévias visuais instantâneas com a IA da HelpUS.
-              </p>
-            </div>
+
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <Sparkles className="w-3.5 h-3.5" />
+              Real Photo & 3D AI Ativo
+            </span>
           </div>
 
           <form onSubmit={handleGenerateAI} className="space-y-4 text-xs">
@@ -219,14 +289,14 @@ export default function DraftsPage() {
               <textarea
                 rows={2}
                 required
-                placeholder="Ex: Como empresas tradicionais perdem clientes ao demorar dias para aprovar criativos..."
+                placeholder="Ex: Executivo analisando dashboard de ROI de publicidade em sala de reuniões corporativa de alta tecnologia..."
                 value={theme}
                 onChange={(e) => setTheme(e.target.value)}
                 className="w-full px-4 py-3 rounded-2xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:border-purple-400 focus:outline-none resize-none leading-relaxed"
               />
             </div>
 
-            <div className="grid sm:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
                 <label className="block text-slate-300 font-bold mb-1">Marca / Cliente</label>
                 <select
@@ -237,6 +307,7 @@ export default function DraftsPage() {
                   <option value="HelpUS BR">HelpUS BR</option>
                   <option value="Advert HelpUS BR">Advert HelpUS BR</option>
                   <option value="HelpUS CVSS">HelpUS CVSS</option>
+                  <option value="CG Details Studio">CG Details Studio</option>
                 </select>
               </div>
 
@@ -247,10 +318,10 @@ export default function DraftsPage() {
                   onChange={(e) => setFormat(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-purple-400 focus:outline-none"
                 >
-                  <option value="Carrossel Visual (7 slides)">Carrossel Visual (7 slides)</option>
-                  <option value="Roteiro de Vídeo (Reels / TikTok)">Roteiro de Vídeo (Reels / TikTok)</option>
-                  <option value="Anúncio de Tráfego Pago (Conversão)">Anúncio de Tráfego Pago (Conversão)</option>
-                  <option value="Artigo & Post Executivo">Artigo & Post Executivo</option>
+                  <option value="Carrossel Visual (7 slides)">Carrossel Visual (Square 1:1)</option>
+                  <option value="Roteiro de Vídeo (Reels / TikTok)">Vídeo / Stories (Reels 9:16)</option>
+                  <option value="Anúncio de Tráfego Pago (Conversão)">Banner de Tráfego (1.91:1)</option>
+                  <option value="Artigo & Post Executivo">Artigo Executivo (Landscape)</option>
                 </select>
               </div>
 
@@ -263,8 +334,21 @@ export default function DraftsPage() {
                 >
                   <option value="LinkedIn">LinkedIn</option>
                   <option value="Instagram (@helpus.ecommerce)">Instagram</option>
-                  <option value="Meta Ads / Google Search">Meta Ads / Google Search</option>
+                  <option value="Meta Ads / Google Search">Meta Ads / Google Ads</option>
                   <option value="Portal Oficial">Portal Oficial</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-bold mb-1">Estilo Visual da IA</label>
+                <select
+                  value={visualStyle}
+                  onChange={(e) => setVisualStyle(e.target.value as any)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-purple-500/50 text-purple-300 font-medium focus:border-purple-400 focus:outline-none"
+                >
+                  <option value="realistic_photo">📸 Fotografia Realista (Estúdio)</option>
+                  <option value="tech_3d">🌐 3D Cyber-Tech (Neon Dark)</option>
+                  <option value="vector_dark">🎨 Layout Vetorial Dark HelpUS</option>
                 </select>
               </div>
             </div>
@@ -273,10 +357,14 @@ export default function DraftsPage() {
               <button
                 type="submit"
                 disabled={isGenerating}
-                className="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold shadow-lg shadow-purple-600/30 transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-purple-600/30 transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
               >
-                <Sparkles className="w-4 h-4" />
-                <span>{isGenerating ? 'Gerando Copy & Arte com IA...' : '⚡ Gerar Rascunho com IA'}</span>
+                <Sparkles className={`w-4 h-4 ${isGenerating ? 'animate-spin' : ''}`} />
+                <span>
+                  {isGenerating
+                    ? 'Gerando Copy & Arte com IA Generativa...'
+                    : '⚡ Gerar Copy & Arte com IA'}
+                </span>
               </button>
             </div>
           </form>
@@ -290,63 +378,82 @@ export default function DraftsPage() {
             {drafts.map((draft) => (
               <article
                 key={draft.id}
-                className="bg-slate-900/80 border border-slate-800 hover:border-slate-700 p-6 rounded-2xl flex flex-col justify-between space-y-5 shadow-lg transition"
+                className="bg-slate-900/80 border border-slate-800 hover:border-slate-700 rounded-2xl flex flex-col justify-between overflow-hidden shadow-lg transition"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-800 text-purple-400 border border-slate-700">
-                      {draft.brand}
+                {/* Thumbnail Visual se houver */}
+                {draft.imageUrl && (
+                  <div className="w-full h-44 bg-slate-950 relative overflow-hidden group">
+                    <img
+                      src={draft.imageUrl}
+                      alt={draft.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                    <span className="absolute top-3 right-3 text-[10px] font-bold px-2 py-0.5 rounded bg-black/70 backdrop-blur-sm text-white border border-white/10 flex items-center gap-1">
+                      <Camera className="w-3 h-3 text-amber-400" />
+                      {draft.imageStyle === 'tech_3d' ? '3D Render' : 'Foto IA'}
                     </span>
-                    <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${draft.statusColor}`}
-                    >
-                      {draft.status}
-                    </span>
                   </div>
+                )}
 
-                  <h3 className="text-base font-bold text-white leading-snug">{draft.title}</h3>
-
-                  <div className="space-y-1.5 pt-2 text-xs border-t border-slate-800 text-slate-300">
-                    <div className="flex items-center gap-2">
-                      <Layers className="w-3.5 h-3.5 text-purple-400" />
-                      <span>{draft.format}</span>
+                <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-800 text-purple-400 border border-slate-700">
+                        {draft.brand}
+                      </span>
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${draft.statusColor}`}
+                      >
+                        {draft.status}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Share2 className="w-3.5 h-3.5 text-sky-400" />
-                      <span>{draft.channel}</span>
+
+                    <h3 className="text-base font-bold text-white leading-snug">{draft.title}</h3>
+
+                    <div className="space-y-1.5 pt-2 text-xs border-t border-slate-800 text-slate-300">
+                      <div className="flex items-center gap-2">
+                        <Layers className="w-3.5 h-3.5 text-purple-400" />
+                        <span>{draft.format}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Share2 className="w-3.5 h-3.5 text-sky-400" />
+                        <span>{draft.channel}</span>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80 text-[11px] space-y-1">
+                      <span className="font-bold text-slate-400 block">Chamada para Ação (CTA):</span>
+                      <p className="text-slate-300 italic">{draft.cta}</p>
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80 text-[11px] space-y-1">
-                    <span className="font-bold text-slate-400 block">Chamada para Ação (CTA):</span>
-                    <p className="text-slate-300 italic">{draft.cta}</p>
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
-                  <button
-                    onClick={() => setPreviewDraft(draft)}
-                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-                  >
-                    <Eye className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Ver Arte</span>
-                  </button>
-
-                  <div className="flex items-center gap-2">
-                    <Link
-                      href="/approvals"
-                      className="text-xs font-bold text-purple-400 hover:underline flex items-center gap-1"
-                    >
-                      <Send className="w-3 h-3" />
-                    </Link>
-
+                  <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-2">
                     <button
-                      onClick={() => handleDelete(draft.id)}
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-800 transition cursor-pointer"
-                      title="Excluir rascunho"
+                      onClick={() => setPreviewDraft(draft)}
+                      className="px-3.5 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer border border-purple-500/30"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Eye className="w-3.5 h-3.5 text-purple-400" />
+                      <span>Ver Arte Completa</span>
                     </button>
+
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href="/approvals"
+                        className="p-2 rounded-xl bg-slate-800 text-purple-400 hover:text-white transition"
+                        title="Enviar para aprovação"
+                      >
+                        <Send className="w-3.5 h-3.5" />
+                      </Link>
+
+                      <button
+                        onClick={() => handleDelete(draft.id)}
+                        className="p-2 rounded-xl text-slate-500 hover:text-red-400 hover:bg-slate-800 transition cursor-pointer"
+                        title="Excluir rascunho"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </article>
@@ -359,9 +466,9 @@ export default function DraftsPage() {
           <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
           >
-            <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-6 shadow-2xl relative">
+            <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 sm:p-8 max-w-2xl w-full space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
               <button
                 onClick={() => setPreviewDraft(null)}
                 className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer"
@@ -372,69 +479,101 @@ export default function DraftsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded">
-                    Prévia Visual do Criativo
+                    Arte Fotográfica & Criativo de IA
                   </span>
-                  <h3 className="text-lg font-bold text-white mt-1">{previewDraft.brand}</h3>
+                  <h3 className="text-xl font-bold text-white mt-1">{previewDraft.brand}</h3>
                 </div>
-                <span className="text-xs text-slate-400 font-mono">{previewDraft.channel}</span>
+                <div className="text-right">
+                  <span className="text-xs text-slate-400 font-mono block">{previewDraft.channel}</span>
+                  {previewDraft.engine && (
+                    <span className="text-[10px] text-amber-400 font-semibold">{previewDraft.engine}</span>
+                  )}
+                </div>
               </div>
 
-              {/* CARD VISUAL SIMULADO (POST DE REDE SOCIAL) */}
-              <div
-                className={`w-full aspect-[4/3] rounded-2xl p-6 bg-gradient-to-br ${
-                  previewDraft.generatedImageTheme || 'from-blue-950 via-slate-900 to-indigo-950'
-                } border border-slate-700 flex flex-col justify-between shadow-2xl relative overflow-hidden`}
-              >
-                <div className="flex items-center justify-between z-10">
-                  <div className="flex items-center gap-2">
+              {/* ARTE VISUAL REAL (IMAGEM FOTOGRÁFICA GERADA COM IA) */}
+              <div className="w-full rounded-2xl overflow-hidden border border-slate-700 bg-slate-950 relative shadow-2xl">
+                {previewDraft.imageUrl ? (
+                  <div className="relative group">
                     <img
-                      src="/img/helpus-logo.png"
-                      alt="HelpUS Logo"
-                      className="w-7 h-7 rounded-full object-contain border border-amber-400/40"
+                      src={previewDraft.imageUrl}
+                      alt={previewDraft.title}
+                      className="w-full max-h-[440px] object-cover"
                     />
-                    <div>
-                      <span className="text-xs font-black text-white block leading-tight">{previewDraft.brand}</span>
-                      <span className="text-[9px] text-amber-400 font-bold uppercase">Operações de Mídia</span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-6 flex flex-col justify-end">
+                      <div className="flex items-center gap-2 mb-2">
+                        <img
+                          src="/img/helpus-logo.png"
+                          alt="HelpUS Logo"
+                          className="w-6 h-6 rounded-full object-contain border border-amber-400/50"
+                        />
+                        <span className="text-xs font-black text-white">{previewDraft.brand}</span>
+                      </div>
+                      <h4 className="text-lg font-black text-white leading-tight drop-shadow-md">
+                        {previewDraft.title}
+                      </h4>
+                      <p className="text-xs text-slate-300 mt-1 line-clamp-2">
+                        {previewDraft.cta}
+                      </p>
                     </div>
                   </div>
-                  <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-slate-950/80 text-slate-300 border border-slate-800">
-                    {previewDraft.format.split(' ')[0]}
-                  </span>
-                </div>
-
-                <div className="z-10 space-y-2 my-auto">
-                  <h4 className="text-base sm:text-lg font-black text-white leading-tight drop-shadow-md">
-                    {previewDraft.title}
-                  </h4>
-                  <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed">
-                    Acelere o crescimento da sua marca com tecnologia proprietária, produção contínua e esteira executiva de aprovações.
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between pt-3 border-t border-slate-800/80 z-10">
-                  <span className="text-[10px] font-semibold text-emerald-400 flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" /> HelpUS Ad Engine
-                  </span>
-                  <span className="text-[10px] font-bold px-3 py-1 rounded-full bg-amber-400 text-slate-950">
-                    Saiba Mais
-                  </span>
-                </div>
+                ) : (
+                  <div
+                    className={`w-full aspect-[4/3] p-6 bg-gradient-to-br ${
+                      previewDraft.generatedImageTheme || 'from-blue-950 via-slate-900 to-indigo-950'
+                    } flex flex-col justify-between`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-white">{previewDraft.brand}</span>
+                      <span className="text-xs text-slate-400">{previewDraft.format}</span>
+                    </div>
+                    <h4 className="text-lg font-black text-white">{previewDraft.title}</h4>
+                    <p className="text-xs text-slate-300">{previewDraft.cta}</p>
+                  </div>
+                )}
               </div>
 
-              <div className="flex items-center justify-between pt-2">
-                <Link
-                  href="/approvals"
-                  className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition shadow-md flex items-center gap-2"
-                >
-                  <Send className="w-3.5 h-3.5" /> Enviar para Aprovação Master
-                </Link>
+              {/* AÇÕES DE EXPORTAÇÃO E REGENERAÇÃO */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleRegenerateArt(previewDraft)}
+                    disabled={isRegeneratingImage}
+                    className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer disabled:opacity-50"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 text-amber-400 ${isRegeneratingImage ? 'animate-spin' : ''}`} />
+                    <span>{isRegeneratingImage ? 'Regenerando...' : 'Regenerar Imagem'}</span>
+                  </button>
 
-                <button
-                  onClick={() => setPreviewDraft(null)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs"
-                >
-                  Fechar
-                </button>
+                  {previewDraft.imageUrl && (
+                    <a
+                      href={previewDraft.imageUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download="arte-helpus.jpg"
+                      className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition"
+                    >
+                      <Download className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Baixar Imagem</span>
+                    </a>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Link
+                    href="/approvals"
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs transition shadow-md flex items-center gap-2"
+                  >
+                    <Send className="w-3.5 h-3.5" /> Enviar para Aprovação Master
+                  </Link>
+
+                  <button
+                    onClick={() => setPreviewDraft(null)}
+                    className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs"
+                  >
+                    Fechar
+                  </button>
+                </div>
               </div>
             </div>
           </div>
