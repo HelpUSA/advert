@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AdminGate from '../../components/AdminGate';
 import { useLanguage } from '../../lib/LanguageContext';
@@ -15,11 +15,28 @@ import {
   Trash2,
   Check,
   Layers,
-  Film,
-  Compass,
+  Eye,
+  X,
+  Download,
+  Image as ImageIcon,
 } from 'lucide-react';
 
-const initialDrafts = [
+interface Draft {
+  id: string;
+  title: string;
+  brand: string;
+  channel: string;
+  format: string;
+  pillar: string;
+  status: string;
+  statusColor: string;
+  cta: string;
+  readiness: string;
+  next: string;
+  generatedImageTheme?: string;
+}
+
+const initialDrafts: Draft[] = [
   {
     id: 'draft-1',
     title: 'Por que operações próprias de publicidade transformam o ROI de marcas',
@@ -32,6 +49,7 @@ const initialDrafts = [
     cta: 'Acompanhar a evolução do ecossistema HelpUS',
     readiness: 'Pronto para fila de aprovação',
     next: 'Encaminhar ao SuperAdmin para validação final',
+    generatedImageTheme: 'from-blue-950 via-slate-900 to-indigo-950',
   },
   {
     id: 'draft-2',
@@ -45,6 +63,7 @@ const initialDrafts = [
     cta: 'Solicitar diagnóstico gratuito no portal helpusbr.com',
     readiness: 'Estruturação dos slides com IA Criativa HelpUS',
     next: 'Gerar artes visuais finais com a paleta Dark HelpUS',
+    generatedImageTheme: 'from-amber-950/60 via-slate-900 to-slate-950',
   },
   {
     id: 'draft-3',
@@ -58,13 +77,15 @@ const initialDrafts = [
     cta: 'Simular vetores de risco em cvss.helpusbr.com',
     readiness: 'Aguardando decisão de aprovação',
     next: 'Validar copy técnica e disparar nos canais',
+    generatedImageTheme: 'from-purple-950/60 via-slate-900 to-slate-950',
   },
 ];
 
 export default function DraftsPage() {
-  const [drafts, setDrafts] = useState(initialDrafts);
+  const [drafts, setDrafts] = useState<Draft[]>(initialDrafts);
   const [isGenerating, setIsGenerating] = useState(false);
   const [notification, setNotification] = useState<string | null>(null);
+  const [previewDraft, setPreviewDraft] = useState<Draft | null>(null);
 
   // Formulário do Gerador IA
   const [theme, setTheme] = useState('');
@@ -74,14 +95,38 @@ export default function DraftsPage() {
 
   const { t } = useLanguage();
 
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('helpus_advert_drafts');
+      if (saved) {
+        setDrafts(JSON.parse(saved));
+      }
+    } catch {}
+  }, []);
+
+  const saveDrafts = (newDrafts: Draft[]) => {
+    setDrafts(newDrafts);
+    try {
+      localStorage.setItem('helpus_advert_drafts', JSON.stringify(newDrafts));
+    } catch {}
+  };
+
   const handleGenerateAI = (e: React.FormEvent) => {
     e.preventDefault();
     if (!theme.trim()) return;
 
     setIsGenerating(true);
 
+    const gradientThemes = [
+      'from-blue-950 via-slate-900 to-indigo-950',
+      'from-purple-950/60 via-slate-900 to-slate-950',
+      'from-emerald-950/60 via-slate-900 to-slate-950',
+      'from-amber-950/60 via-slate-900 to-slate-950',
+    ];
+    const randomTheme = gradientThemes[Math.floor(Math.random() * gradientThemes.length)];
+
     setTimeout(() => {
-      const newDraft = {
+      const newDraft: Draft = {
         id: `draft-${Date.now()}`,
         title: theme.trim(),
         brand: selectedBrand,
@@ -91,20 +136,23 @@ export default function DraftsPage() {
         status: 'Rascunho Pronto (Gerado IA)',
         statusColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
         cta: 'Conheça o ecossistema HelpUS e fale no WhatsApp',
-        readiness: 'Copy e estrutura geradas com sucesso',
+        readiness: 'Copy e arte visual geradas com sucesso',
         next: 'Enviar para esteira de aprovação Master',
+        generatedImageTheme: randomTheme,
       };
 
-      setDrafts([newDraft, ...drafts]);
+      const updated = [newDraft, ...drafts];
+      saveDrafts(updated);
       setIsGenerating(false);
       setTheme('');
-      setNotification(`Criativo "${newDraft.title}" gerado com sucesso pelo Motor IA!`);
-      setTimeout(() => setNotification(null), 4000);
+      setNotification(`Criativo e Arte Visual "${newDraft.title}" gerados com sucesso!`);
+      setPreviewDraft(newDraft);
+      setTimeout(() => setNotification(null), 5000);
     }, 1200);
   };
 
   const handleDelete = (id: string) => {
-    setDrafts(drafts.filter((d) => d.id !== id));
+    saveDrafts(drafts.filter((d) => d.id !== id));
   };
 
   return (
@@ -156,9 +204,9 @@ export default function DraftsPage() {
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Motor IA de Criação de Rascunhos</h2>
+              <h2 className="text-lg font-bold text-white">Motor IA de Criação de Rascunhos & Artes</h2>
               <p className="text-xs text-slate-400">
-                Gere roteiros, carrosséis ou anúncios completos em segundos com a IA da HelpUS.
+                Gere roteiros, carrosséis, anúncios e prévias visuais instantâneas com a IA da HelpUS.
               </p>
             </div>
           </div>
@@ -228,7 +276,7 @@ export default function DraftsPage() {
                 className="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold shadow-lg shadow-purple-600/30 transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 <Sparkles className="w-4 h-4" />
-                <span>{isGenerating ? 'Gerando com IA...' : '⚡ Gerar Rascunho com IA'}</span>
+                <span>{isGenerating ? 'Gerando Copy & Arte com IA...' : '⚡ Gerar Rascunho com IA'}</span>
               </button>
             </div>
           </form>
@@ -275,27 +323,122 @@ export default function DraftsPage() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                  <Link
-                    href="/approvals"
-                    className="text-xs font-bold text-purple-400 hover:underline flex items-center gap-1"
-                  >
-                    <span>Enviar para Aprovação</span>
-                    <Send className="w-3 h-3" />
-                  </Link>
-
+                <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
                   <button
-                    onClick={() => handleDelete(draft.id)}
-                    className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-800 transition cursor-pointer"
-                    title="Excluir rascunho"
+                    onClick={() => setPreviewDraft(draft)}
+                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Eye className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Ver Arte</span>
                   </button>
+
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href="/approvals"
+                      className="text-xs font-bold text-purple-400 hover:underline flex items-center gap-1"
+                    >
+                      <Send className="w-3 h-3" />
+                    </Link>
+
+                    <button
+                      onClick={() => handleDelete(draft.id)}
+                      className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-800 transition cursor-pointer"
+                      title="Excluir rascunho"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </article>
             ))}
           </div>
         </div>
+
+        {/* MODAL DE PRÉ-VISUALIZAÇÃO DA ARTE VISUAL DO CRIATIVO */}
+        {previewDraft && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200"
+          >
+            <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-6 shadow-2xl relative">
+              <button
+                onClick={() => setPreviewDraft(null)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded">
+                    Prévia Visual do Criativo
+                  </span>
+                  <h3 className="text-lg font-bold text-white mt-1">{previewDraft.brand}</h3>
+                </div>
+                <span className="text-xs text-slate-400 font-mono">{previewDraft.channel}</span>
+              </div>
+
+              {/* CARD VISUAL SIMULADO (POST DE REDE SOCIAL) */}
+              <div
+                className={`w-full aspect-[4/3] rounded-2xl p-6 bg-gradient-to-br ${
+                  previewDraft.generatedImageTheme || 'from-blue-950 via-slate-900 to-indigo-950'
+                } border border-slate-700 flex flex-col justify-between shadow-2xl relative overflow-hidden`}
+              >
+                <div className="flex items-center justify-between z-10">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src="/img/helpus-logo.png"
+                      alt="HelpUS Logo"
+                      className="w-7 h-7 rounded-full object-contain border border-amber-400/40"
+                    />
+                    <div>
+                      <span className="text-xs font-black text-white block leading-tight">{previewDraft.brand}</span>
+                      <span className="text-[9px] text-amber-400 font-bold uppercase">Operações de Mídia</span>
+                    </div>
+                  </div>
+                  <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-slate-950/80 text-slate-300 border border-slate-800">
+                    {previewDraft.format.split(' ')[0]}
+                  </span>
+                </div>
+
+                <div className="z-10 space-y-2 my-auto">
+                  <h4 className="text-base sm:text-lg font-black text-white leading-tight drop-shadow-md">
+                    {previewDraft.title}
+                  </h4>
+                  <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed">
+                    Acelere o crescimento da sua marca com tecnologia proprietária, produção contínua e esteira executiva de aprovações.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between pt-3 border-t border-slate-800/80 z-10">
+                  <span className="text-[10px] font-semibold text-emerald-400 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" /> HelpUS Ad Engine
+                  </span>
+                  <span className="text-[10px] font-bold px-3 py-1 rounded-full bg-amber-400 text-slate-950">
+                    Saiba Mais
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-2">
+                <Link
+                  href="/approvals"
+                  className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition shadow-md flex items-center gap-2"
+                >
+                  <Send className="w-3.5 h-3.5" /> Enviar para Aprovação Master
+                </Link>
+
+                <button
+                  onClick={() => setPreviewDraft(null)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs"
+                >
+                  Fechar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </AdminGate>
   );

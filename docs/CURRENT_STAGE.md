@@ -1,22 +1,28 @@
-﻿# Current Stage
+# Current Stage — HelpUS Advert
 
-## Active stage
-Stage 4 - Railway API
+## Active Stage
+Stage 5 - Full Operational AdTech Platform & Production Launch
 
-## Previous stage
-Stage 3 - Frontend MVP: completed.
+## Completed Milestones
+- **Public Commercial Landing Page**: 
+  - Dynamic Campaign Cockpit Mockup (+214% ROI, 342.8k reach).
+  - Interactive ROI & Budget Simulator with live dynamic calculations and WhatsApp deep links.
+  - Interactive Creative Formats Showcase (Carousel slide viewer, Video Reels scripts, Paid Traffic Ads, Executive Articles).
+  - 4-Stage Operational Cycle & Interactive FAQ Accordion.
+  - Full i18n support in 3 languages (PT, EN, ES) with instant client language toggle.
+  - LGPD Cookie consent modal and compliant footer.
+  - Official HelpUS circular branding across all touchpoints.
+- **SuperAdmin Operations Hub (Gated)**:
+  - Google OAuth SuperAdmin gate (`helpus.ecommerce@gmail.com`).
+  - `/brands`: Interactive brand directory with real-time search and creation modal.
+  - `/campaigns`: Multichannel campaign pipeline with real-time search and creation modal.
+  - `/calendar`: Interactive monthly calendar grid for October 2026, channel filters, and scheduling modal.
+  - `/drafts`: Interactive AI creative generator with real-time copy synthesis, visual card preview canvas, and direct approval pipeline integration.
+  - `/approvals`: Safety gate pipeline with 1-click approvals, rejection handling, and live social API dispatch simulation.
+  - `/workflow`: Interactive Kanban board with stage progression and methodology safety gates toggle.
+  - `/reports`: Executive business indicators with period filters (7d, 30d, 90d, 2026) and 1-click CSV report export.
+  - Client persistence via `localStorage` with SSR fallback.
 
-## Stage 4 objective
-Create backend service for future persistence and watcher integration.
-
-## Stage 4 deliverables
-- services/api backend skeleton
-- Health endpoint
-- Core DTO definitions
-- Validation direction
-- Railway deployment notes
-- API README
-- Local API validation command
-
-## Stage 4 first task
-Create services/api with a minimal Node API health endpoint and package scripts.
+## Production Status
+- **Domain**: [https://advert.helpusbr.com](https://advert.helpusbr.com)
+- **Vercel Build**: Turbopack static generation in ~2.3s (0 errors across 11 routes).
