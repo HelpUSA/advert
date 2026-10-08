@@ -25,6 +25,7 @@ export const translations = {
       approvals: 'Aprovações',
       workflow: 'Fluxo Operacional',
       reports: 'Relatórios & ROI',
+      integrations: 'Integrações & APIs',
       logout: 'Sair',
     },
     publicLanding: {
@@ -379,6 +380,7 @@ export const translations = {
       approvals: 'Approvals',
       workflow: 'Operational Flow',
       reports: 'Reports & ROI',
+      integrations: 'Integrations & APIs',
       logout: 'Sign Out',
     },
     publicLanding: {
@@ -733,6 +735,7 @@ export const translations = {
       approvals: 'Aprobaciones',
       workflow: 'Flujo Operativo',
       reports: 'Informes y ROI',
+      integrations: 'Integraciones y APIs',
       logout: 'Cerrar Sesión',
     },
     publicLanding: {

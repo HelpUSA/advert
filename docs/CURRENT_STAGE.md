@@ -21,8 +21,10 @@ Stage 5 - Full Operational AdTech Platform & Production Launch
   - `/approvals`: Safety gate pipeline with 1-click approvals, rejection handling, and live social API dispatch simulation.
   - `/workflow`: Interactive Kanban board with stage progression and methodology safety gates toggle.
   - `/reports`: Executive business indicators with period filters (7d, 30d, 90d, 2026) and 1-click CSV report export.
-  - Client persistence via `localStorage` with SSR fallback.
+  - `/integrations`: API credentials management (Meta Graph API, LinkedIn Ads, Google Ads), webhook handshake testing, and cloud server sync.
+  - Backend API Handlers: `/api/data` (cloud persistence & JSON disk fallback), `/api/webhooks/social` (handshake & ingestion), `/api/ai/generate-image` (SVG/PNG visual generation).
+  - Client persistence via `localStorage` with SSR fallback and cloud server sync.
 
 ## Production Status
 - **Domain**: [https://advert.helpusbr.com](https://advert.helpusbr.com)
-- **Vercel Build**: Turbopack static generation in ~2.3s (0 errors across 11 routes).
+- **Vercel Build**: Turbopack static & dynamic generation in ~2.6s (0 errors across 13 routes).

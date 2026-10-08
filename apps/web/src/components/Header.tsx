@@ -47,6 +47,7 @@ export default function Header() {
     { href: '/approvals', label: t.nav.approvals },
     { href: '/workflow', label: t.nav.workflow },
     { href: '/reports', label: t.nav.reports },
+    { href: '/integrations', label: t.nav.integrations },
   ];
 
   const currentNavItems = isAuthenticated ? adminNavItems : publicNavItems;
