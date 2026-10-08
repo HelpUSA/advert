@@ -7,25 +7,19 @@ import { useGoogleAuth } from '../lib/useGoogleAuth';
 import { WHATSAPP_NUMBER } from '../lib/i18n';
 import {
   Sparkles,
-  Zap,
   ShieldCheck,
   CheckCircle2,
   ArrowRight,
   TrendingUp,
-  BarChart3,
-  Calendar,
-  Send,
   MessageCircle,
   ExternalLink,
   X,
-  Target,
-  Layers,
   Check,
 } from 'lucide-react';
 
 export default function Home() {
   const { language, t } = useLanguage();
-  const { user, isAuthenticated } = useGoogleAuth();
+  const { isAuthenticated } = useGoogleAuth();
 
   // Estado para o Modal de "Saiba mais" de cada serviço
   const [selectedService, setSelectedService] = useState<any | null>(null);
@@ -39,36 +33,9 @@ export default function Home() {
 
   const whatsappGeneralUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappGeneralMsg)}`;
 
-  const caseImages = [
-    {
-      name: 'PublicArt Mídia & Comunicação',
-      category: 'Mídia Exterior & OOH',
-      image: '/media/publicart-site.png',
-      metric: '+230% de Alcance',
-    },
-    {
-      name: 'CG Details Studio',
-      category: 'Estética Automotiva Premium',
-      image: '/media/details-site.png',
-      metric: '+185% de Conversão',
-    },
-    {
-      name: 'Kátia Xavier Imóveis',
-      category: 'Mercado Imobiliário de Alto Padrão',
-      image: '/media/katia-site.png',
-      metric: 'Gestão Editorial 100% IA',
-    },
-    {
-      name: 'BlueBox Soluções',
-      category: 'Arquitetura & Módulos Sustentáveis',
-      image: '/media/bluebox-site.png',
-      metric: 'Tráfego Qualificado',
-    },
-  ];
-
   return (
     <main className="space-y-20 sm:space-y-28 py-6 sm:py-10">
-      {/* 1. HERO COM MOCKUP DE CAMPANHA & APRESENTAÇÃO COMERCIAL */}
+      {/* 1. HERO COM COCKPIT VISUAL DE CAMPANHA & APRESENTAÇÃO COMERCIAL */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950/50 border border-slate-800 rounded-3xl p-6 sm:p-12 lg:p-14 shadow-2xl">
           <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -152,52 +119,52 @@ export default function Home() {
                   <div className="flex items-center gap-2">
                     <span className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
                     <span className="text-xs font-bold text-white uppercase tracking-wider">
-                      Campanha Ativa • HelpUS Advert
+                      {t.publicLanding.cockpit.activeCampaign}
                     </span>
                   </div>
                   <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-bold">
-                    +214% ROI
+                    {t.publicLanding.cockpit.roi}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-xs">
                   <div className="bg-slate-900/90 p-3.5 rounded-2xl border border-slate-800">
                     <span className="text-[10px] text-slate-400 uppercase font-bold block mb-1">
-                      Alcance Total
+                      {t.publicLanding.cockpit.totalReach}
                     </span>
                     <span className="text-xl font-black text-white block">342.800</span>
                     <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-0.5 mt-0.5">
-                      <TrendingUp className="w-3 h-3" /> +184% este mês
+                      <TrendingUp className="w-3 h-3" /> {t.publicLanding.cockpit.thisMonth}
                     </span>
                   </div>
 
                   <div className="bg-slate-900/90 p-3.5 rounded-2xl border border-slate-800">
                     <span className="text-[10px] text-slate-400 uppercase font-bold block mb-1">
-                      Leads Qualificados
+                      {t.publicLanding.cockpit.qualifiedLeads}
                     </span>
                     <span className="text-xl font-black text-amber-400 block">1.420</span>
                     <span className="text-[10px] text-slate-400 font-medium block mt-0.5">
-                      Custo por Lead: -42%
+                      {t.publicLanding.cockpit.costPerLead}
                     </span>
                   </div>
                 </div>
 
                 <div className="space-y-2 pt-1 text-xs">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-                    Canais Conectados:
+                    {t.publicLanding.cockpit.connectedChannels}
                   </span>
                   <div className="flex flex-wrap gap-1.5 font-mono text-[10px]">
                     <span className="px-2.5 py-1 rounded-lg bg-slate-900 text-sky-400 border border-slate-800">
-                      LinkedIn
+                      {t.publicLanding.cockpit.channels.linkedin}
                     </span>
                     <span className="px-2.5 py-1 rounded-lg bg-slate-900 text-pink-400 border border-slate-800">
-                      Instagram Ads
+                      {t.publicLanding.cockpit.channels.instagram}
                     </span>
                     <span className="px-2.5 py-1 rounded-lg bg-slate-900 text-emerald-400 border border-slate-800">
-                      Google Search
+                      {t.publicLanding.cockpit.channels.google}
                     </span>
                     <span className="px-2.5 py-1 rounded-lg bg-slate-900 text-amber-400 border border-slate-800">
-                      Portais & OOH
+                      {t.publicLanding.cockpit.channels.portals}
                     </span>
                   </div>
                 </div>
@@ -207,10 +174,10 @@ export default function Home() {
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
                     <div>
                       <span className="font-bold text-white text-[11px] block">
-                        Esteira de Aprovação Master
+                        {t.publicLanding.cockpit.masterApprovalTitle}
                       </span>
                       <span className="text-[10px] text-slate-400">
-                        100% dos criativos validados antes do disparo
+                        {t.publicLanding.cockpit.masterApprovalDesc}
                       </span>
                     </div>
                   </div>
@@ -228,7 +195,7 @@ export default function Home() {
       <section id="servicos" className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <span className="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20 inline-block">
-            Soluções para Empresas & Marcas
+            {t.publicLanding.servicesBadge}
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
             {t.publicLanding.servicesTitle}
@@ -280,7 +247,7 @@ export default function Home() {
       <section id="cases" className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full border border-emerald-400/20 inline-block">
-            Resultados Comprovados
+            {t.publicLanding.casesBadge}
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
             {t.publicLanding.casesTitle}
@@ -291,7 +258,7 @@ export default function Home() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {caseImages.map((c, idx) => (
+          {t.publicLanding.cases.map((c, idx) => (
             <div
               key={idx}
               className="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl overflow-hidden shadow-lg transition duration-200 group flex flex-col justify-between"
@@ -325,7 +292,7 @@ export default function Home() {
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-12 shadow-2xl space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20 inline-block">
-              Por que a HelpUS?
+              {t.publicLanding.comparisonBadge}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               {t.publicLanding.comparisonTitle}
@@ -336,7 +303,7 @@ export default function Home() {
             <table className="w-full text-left text-xs sm:text-sm">
               <thead>
                 <tr className="border-b border-slate-800 text-slate-400">
-                  <th className="pb-4 font-bold">Critério Operacional</th>
+                  <th className="pb-4 font-bold">{t.publicLanding.criteriaHeader}</th>
                   <th className="pb-4 font-bold text-red-400">{t.publicLanding.comparisonAgency}</th>
                   <th className="pb-4 font-bold text-amber-400">{t.publicLanding.comparisonHelpUS}</th>
                 </tr>
@@ -387,7 +354,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="px-6 py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 transition flex items-center gap-2"
             >
-              <span>Portal HelpUS Principal</span>
+              <span>{t.publicLanding.portalShortcut}</span>
               <ExternalLink className="w-4 h-4" />
             </a>
           </div>

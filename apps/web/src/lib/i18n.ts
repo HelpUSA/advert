@@ -34,6 +34,25 @@ export const translations = {
       badgeSpeed: 'Agilidade Corporativa',
       badgeSecurity: 'Governança & Segurança',
       
+      cockpit: {
+        activeCampaign: 'Campanha Ativa • HelpUS Advert',
+        roi: '+214% ROI',
+        totalReach: 'Alcance Total',
+        thisMonth: '+184% este mês',
+        qualifiedLeads: 'Leads Qualificados',
+        costPerLead: 'Custo por Lead: -42%',
+        connectedChannels: 'Canais Conectados:',
+        channels: {
+          linkedin: 'LinkedIn',
+          instagram: 'Instagram Ads',
+          google: 'Google Search',
+          portals: 'Portais & OOH',
+        },
+        masterApprovalTitle: 'Esteira de Aprovação Master',
+        masterApprovalDesc: '100% dos criativos validados antes do disparo',
+      },
+
+      servicesBadge: 'Soluções para Empresas & Marcas',
       servicesTitle: 'Serviços Especializados de Publicidade HelpUS',
       servicesSubtitle: 'Um ecossistema completo de marketing de alta performance projetado para marcas, profissionais de autoridade e empresas de tecnologia.',
       learnMore: 'Saiba mais',
@@ -129,12 +148,42 @@ export const translations = {
         },
       ],
 
+      casesBadge: 'Resultados Comprovados',
       casesTitle: 'Ecossistema & Marcas Impulsionadas',
       casesSubtitle: 'Exemplos reais de empresas e plataformas tecnológicas potencializadas com a infraestrutura e publicidade da HelpUS.',
 
+      cases: [
+        {
+          name: 'PublicArt Mídia & Comunicação',
+          category: 'Mídia Exterior & OOH',
+          image: '/media/publicart-site.png',
+          metric: '+230% de Alcance',
+        },
+        {
+          name: 'CG Details Studio',
+          category: 'Estética Automotiva Premium',
+          image: '/media/details-site.png',
+          metric: '+185% de Conversão',
+        },
+        {
+          name: 'Kátia Xavier Imóveis',
+          category: 'Mercado Imobiliário de Alto Padrão',
+          image: '/media/katia-site.png',
+          metric: 'Gestão Editorial 100% IA',
+        },
+        {
+          name: 'BlueBox Soluções',
+          category: 'Arquitetura & Módulos Sustentáveis',
+          image: '/media/bluebox-site.png',
+          metric: 'Tráfego Qualificado',
+        },
+      ],
+
+      comparisonBadge: 'Por que a HelpUS?',
       comparisonTitle: 'Agência Tradicional vs HelpUS Advert',
       comparisonAgency: 'Agência Tradicional',
       comparisonHelpUS: 'HelpUS Advert (Tecnologia + Gestão)',
+      criteriaHeader: 'Critério Operacional',
       comparisonRows: [
         { feature: 'Tempo de Produção de Criativos', agency: '5 a 10 dias úteis', helpus: 'Minutos com automação inteligente' },
         { feature: 'Esteira de Aprovação', agency: 'E-mails perdidos e retrabalho', helpus: 'Painel executivo com 1-clique' },
@@ -145,6 +194,7 @@ export const translations = {
       ctaBannerTitle: 'Pronto para Transformar a Publicidade da Sua Marca?',
       ctaBannerSubtitle: 'Fale diretamente no WhatsApp com os especialistas da HelpUS e receba um diagnóstico exclusivo de posicionamento.',
       contactBtn: 'Conversar no WhatsApp',
+      portalShortcut: 'Portal Principal HelpUS',
     },
     adminAccess: {
       restrictedTitle: 'Mesa de Operações Administrativas',
@@ -213,6 +263,25 @@ export const translations = {
       badgeSpeed: 'Corporate Speed',
       badgeSecurity: 'Governance & Compliance',
       
+      cockpit: {
+        activeCampaign: 'Active Campaign • HelpUS Advert',
+        roi: '+214% ROI',
+        totalReach: 'Total Reach',
+        thisMonth: '+184% this month',
+        qualifiedLeads: 'Qualified Leads',
+        costPerLead: 'Cost per Lead: -42%',
+        connectedChannels: 'Connected Channels:',
+        channels: {
+          linkedin: 'LinkedIn',
+          instagram: 'Instagram Ads',
+          google: 'Google Search',
+          portals: 'Portals & OOH',
+        },
+        masterApprovalTitle: 'Master Approval Pipeline',
+        masterApprovalDesc: '100% of creatives validated before launch',
+      },
+
+      servicesBadge: 'Solutions for Companies & Brands',
       servicesTitle: 'Specialized HelpUS Advertising Services',
       servicesSubtitle: 'A complete high-performance marketing ecosystem designed for brands, authority figures, and technology companies.',
       learnMore: 'Learn more',
@@ -308,12 +377,42 @@ export const translations = {
         },
       ],
 
+      casesBadge: 'Proven Results',
       casesTitle: 'Ecosystem & Empowered Brands',
       casesSubtitle: 'Real-world examples of products and technology platforms scaled with HelpUS digital infrastructure and advertising.',
 
+      cases: [
+        {
+          name: 'PublicArt Mídia & Comunicação',
+          category: 'Outdoor Media & OOH',
+          image: '/media/publicart-site.png',
+          metric: '+230% Reach',
+        },
+        {
+          name: 'CG Details Studio',
+          category: 'Premium Automotive Detailing',
+          image: '/media/details-site.png',
+          metric: '+185% Conversion',
+        },
+        {
+          name: 'Kátia Xavier Imóveis',
+          category: 'High-End Real Estate',
+          image: '/media/katia-site.png',
+          metric: '100% AI Editorial Cadence',
+        },
+        {
+          name: 'BlueBox Soluções',
+          category: 'Architecture & Sustainable Modules',
+          image: '/media/bluebox-site.png',
+          metric: 'Qualified Traffic',
+        },
+      ],
+
+      comparisonBadge: 'Why HelpUS?',
       comparisonTitle: 'Traditional Agency vs HelpUS Advert',
       comparisonAgency: 'Traditional Agency',
       comparisonHelpUS: 'HelpUS Advert (Technology + Management)',
+      criteriaHeader: 'Operational Metric',
       comparisonRows: [
         { feature: 'Creative Production Turnaround', agency: '5 to 10 business days', helpus: 'Minutes with smart automation' },
         { feature: 'Approval Pipeline', agency: 'Lost emails & endless revisions', helpus: 'Executive 1-click dashboard' },
@@ -324,6 +423,7 @@ export const translations = {
       ctaBannerTitle: 'Ready to Transform Your Brand’s Advertising?',
       ctaBannerSubtitle: 'Message our HelpUS specialists directly on WhatsApp to receive a custom positioning and media evaluation.',
       contactBtn: 'Chat on WhatsApp',
+      portalShortcut: 'Main HelpUS Portal',
     },
     adminAccess: {
       restrictedTitle: 'Administrative Operations Hub',
@@ -392,6 +492,25 @@ export const translations = {
       badgeSpeed: 'Agilidad Corporativa',
       badgeSecurity: 'Gobernanza y Seguridad',
       
+      cockpit: {
+        activeCampaign: 'Campaña Activa • HelpUS Advert',
+        roi: '+214% ROI',
+        totalReach: 'Alcance Total',
+        thisMonth: '+184% este mes',
+        qualifiedLeads: 'Leads Calificados',
+        costPerLead: 'Costo por Lead: -42%',
+        connectedChannels: 'Canales Conectados:',
+        channels: {
+          linkedin: 'LinkedIn',
+          instagram: 'Instagram Ads',
+          google: 'Google Search',
+          portals: 'Portales y OOH',
+        },
+        masterApprovalTitle: 'Flujo de Aprobación Master',
+        masterApprovalDesc: '100% de creatividades validadas antes del lanzamiento',
+      },
+
+      servicesBadge: 'Soluciones para Empresas y Marcas',
       servicesTitle: 'Servicios Especializados de Publicidad HelpUS',
       servicesSubtitle: 'Un ecosistema completo de marketing de alto rendimiento diseñado para marcas, profesionales de autoridad y empresas de tecnología.',
       learnMore: 'Más información',
@@ -487,12 +606,42 @@ export const translations = {
         },
       ],
 
+      casesBadge: 'Resultados Comprobados',
       casesTitle: 'Ecosistema y Marcas Impulsadas',
       casesSubtitle: 'Ejemplos reales de productos y plataformas tecnológicas escaladas con la infraestructura HelpUS.',
 
+      cases: [
+        {
+          name: 'PublicArt Mídia & Comunicação',
+          category: 'Publicidad Exterior y OOH',
+          image: '/media/publicart-site.png',
+          metric: '+230% de Alcance',
+        },
+        {
+          name: 'CG Details Studio',
+          category: 'Estética Automotriz Premium',
+          image: '/media/details-site.png',
+          metric: '+185% de Conversión',
+        },
+        {
+          name: 'Kátia Xavier Imóveis',
+          category: 'Inmobiliaria de Alto Nivel',
+          image: '/media/katia-site.png',
+          metric: 'Gestión Editorial 100% IA',
+        },
+        {
+          name: 'BlueBox Soluções',
+          category: 'Arquitectura y Módulos Sostenibles',
+          image: '/media/bluebox-site.png',
+          metric: 'Tráfico Cualificado',
+        },
+      ],
+
+      comparisonBadge: '¿Por qué HelpUS?',
       comparisonTitle: 'Agencia Tradicional vs HelpUS Advert',
       comparisonAgency: 'Agencia Tradicional',
       comparisonHelpUS: 'HelpUS Advert (Tecnología + Gestión)',
+      criteriaHeader: 'Criterio Operativo',
       comparisonRows: [
         { feature: 'Tiempo de Producción de Creativos', agency: '5 a 10 días hábiles', helpus: 'Minutos con automatización inteligente' },
         { feature: 'Flujo de Aprobación', agency: 'Correos perdidos y reprocesos', helpus: 'Panel ejecutivo con 1-clic' },
@@ -503,6 +652,7 @@ export const translations = {
       ctaBannerTitle: '¿Listo para Transformar la Publicidad de su Marca?',
       ctaBannerSubtitle: 'Hable directamente por WhatsApp con los especialistas de HelpUS y reciba un diagnóstico exclusivo de posicionamiento.',
       contactBtn: 'Conversar por WhatsApp',
+      portalShortcut: 'Portal Principal HelpUS',
     },
     adminAccess: {
       restrictedTitle: 'Mesa de Operaciones Administrativas',
