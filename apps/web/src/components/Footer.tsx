@@ -99,7 +99,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="hover:text-sky-400 transition flex items-center gap-1.5"
           >
-            <span>Central HelpUS Hub</span>
+            <span>{t.nav.backToHub}</span>
             <ArrowUpRight className="w-3 h-3" />
           </a>
         </div>

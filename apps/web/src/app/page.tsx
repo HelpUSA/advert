@@ -137,7 +137,7 @@ export default function Home() {
                     className="px-6 py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs sm:text-sm border border-slate-700 transition flex items-center gap-2"
                   >
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span>Mesa de Operações (Ativa)</span>
+                    <span>{t.publicLanding.uiLabels?.adminActiveSession || 'Mesa de Operações (Ativa)'}</span>
                   </Link>
                 ) : (
                   <a
@@ -239,7 +239,7 @@ export default function Home() {
                     </div>
                   </div>
                   <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
-                    OK
+                    {t.publicLanding.uiLabels?.auditedOk || 'OK'}
                   </span>
                 </div>
               </div>
@@ -247,6 +247,40 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* 1.5 O QUE É A HELPUS ADVERT EM 1 MINUTO */}
+      {t.publicLanding.aboutWhatIs && (
+        <section id="o-que-e" className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20 inline-block">
+              {t.publicLanding.aboutWhatIs.badge}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+              {t.publicLanding.aboutWhatIs.title}
+            </h2>
+            <p className="text-sm sm:text-base text-slate-400">
+              {t.publicLanding.aboutWhatIs.subtitle}
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {t.publicLanding.aboutWhatIs.cards.map((card, idx) => (
+              <div
+                key={idx}
+                className="bg-slate-900/80 border border-slate-800 hover:border-amber-400/40 p-7 rounded-2xl flex flex-col justify-between space-y-4 shadow-lg transition duration-200"
+              >
+                <div className="space-y-3">
+                  <span className="text-3xl font-black text-amber-400 font-mono block">
+                    {card.step}
+                  </span>
+                  <h3 className="text-lg font-bold text-white">{card.title}</h3>
+                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{card.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* 2. GRADE DE SERVIÇOS OFERECIDOS AOS CLIENTES */}
       <section id="servicos" className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
@@ -299,6 +333,93 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* 2.5 PLANOS DE SERVIÇO TRANSPARENTES */}
+      {t.publicLanding.packages && (
+        <section id="planos" className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 inline-block">
+              {t.publicLanding.packages.badge}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+              {t.publicLanding.packages.title}
+            </h2>
+            <p className="text-sm sm:text-base text-slate-400">
+              {t.publicLanding.packages.subtitle}
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+            {t.publicLanding.packages.plans.map((plan, idx) => {
+              const planWhatsappMsg =
+                language === 'en'
+                  ? `Hello! I would like to hire HelpUS Advert - ${plan.name}.`
+                  : language === 'es'
+                  ? `¡Hola! Me gustaría contratar HelpUS Advert - ${plan.name}.`
+                  : `Olá! Gostaria de contratar a HelpUS Advert no ${plan.name}.`;
+              const planWhatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                planWhatsappMsg
+              )}`;
+              return (
+                <div
+                  key={idx}
+                  className={`p-7 sm:p-8 rounded-3xl flex flex-col justify-between transition duration-200 relative ${
+                    plan.popular
+                      ? 'bg-gradient-to-b from-slate-900 via-slate-900 to-amber-950/30 border-2 border-amber-400/60 shadow-2xl shadow-amber-400/10'
+                      : 'bg-slate-900/90 border border-slate-800 shadow-xl'
+                  }`}
+                >
+                  {plan.popular && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-md">
+                      {t.publicLanding.uiLabels?.popularBadge || 'MAIS PROCURADO'}
+                    </div>
+                  )}
+
+                  <div className="space-y-5">
+                    <div className="space-y-1.5">
+                      <h3 className="text-xl font-black text-white">{plan.name}</h3>
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400/90 block">
+                        {plan.target}
+                      </span>
+                      <p className="text-xs text-slate-300 leading-relaxed pt-1">{plan.desc}</p>
+                    </div>
+
+                    <div className="space-y-2.5 pt-3 border-t border-slate-800">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                        {t.publicLanding.uiLabels?.includedItems || 'O que está incluso:'}
+                      </span>
+                      <ul className="space-y-2 text-xs text-slate-300">
+                        {plan.features.map((feature, fIdx) => (
+                          <li key={fIdx} className="flex items-start gap-2">
+                            <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="pt-6 mt-6 border-t border-slate-800">
+                    <a
+                      href={planWhatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`w-full py-3.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition shadow-md ${
+                        plan.popular
+                          ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 font-black'
+                          : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-700'
+                      }`}
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      <span>{plan.cta || t.publicLanding.uiLabels?.hireNow || 'Contratar Este Plano'}</span>
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       {/* 3. SIMULADOR COMERCIAL & PROJEÇÃO DE ROI (NOVO RECURSO DE CONVERSÃO) */}
       <section id="simulador" className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -494,17 +615,17 @@ export default function Home() {
                   <button
                     onClick={() => setCarouselSlide((prev) => (prev > 0 ? prev - 1 : 3))}
                     className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white transition border border-slate-700"
-                    aria-label="Slide anterior"
+                    aria-label={t.publicLanding.uiLabels?.prevSlide || 'Slide anterior'}
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <span className="text-xs font-mono text-slate-400">
-                    Slide {carouselSlide + 1} / 4
+                    {t.publicLanding.uiLabels?.slideCount || 'Slide'} {carouselSlide + 1} / 4
                   </span>
                   <button
                     onClick={() => setCarouselSlide((prev) => (prev < 3 ? prev + 1 : 0))}
                     className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white transition border border-slate-700"
-                    aria-label="Próximo slide"
+                    aria-label={t.publicLanding.uiLabels?.nextSlide || 'Próximo slide'}
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
@@ -519,10 +640,12 @@ export default function Home() {
                       alt="HelpUS"
                       className="w-5 h-5 rounded-full object-contain"
                     />
-                    <span className="text-xs font-bold text-white">HelpUS Advert • Slide Viewer</span>
+                    <span className="text-xs font-bold text-white">
+                      HelpUS Advert • {t.publicLanding.uiLabels?.slideViewer || 'Slide Viewer'}
+                    </span>
                   </div>
-                  <span className="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded">
-                    SLIDE 0{carouselSlide + 1}
+                  <span className="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded uppercase font-bold">
+                    {(t.publicLanding.uiLabels?.slideCount || 'SLIDE').toUpperCase()} 0{carouselSlide + 1}
                   </span>
                 </div>
 
@@ -617,10 +740,12 @@ export default function Home() {
                       alt="HelpUS"
                       className="w-5 h-5 rounded-full object-contain"
                     />
-                    <span className="text-xs font-bold text-white">HelpUS • Patrocinado</span>
+                    <span className="text-xs font-bold text-white">
+                      HelpUS • {t.publicLanding.uiLabels?.sponsoredTag || 'Patrocinado'}
+                    </span>
                   </div>
-                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
-                    CONVERSÃO
+                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded uppercase font-bold">
+                    {t.publicLanding.uiLabels?.conversionTag || 'CONVERSÃO'}
                   </span>
                 </div>
 
@@ -885,7 +1010,7 @@ export default function Home() {
             <button
               onClick={() => setSelectedService(null)}
               className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer"
-              aria-label="Fechar"
+              aria-label={t.publicLanding.close}
             >
               <X className="w-5 h-5" />
             </button>

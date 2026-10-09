@@ -4,14 +4,18 @@
 Stage 5 - Full Operational AdTech Platform & Production Launch
 
 ## Completed Milestones
-- **Public Commercial Landing Page**: 
-  - Dynamic Campaign Cockpit Mockup (+214% ROI, 342.8k reach).
-  - Interactive ROI & Budget Simulator with live dynamic calculations and WhatsApp deep links.
-  - Interactive Creative Formats Showcase (Carousel slide viewer, Video Reels scripts, Paid Traffic Ads, Executive Articles).
-  - 4-Stage Operational Cycle & Interactive FAQ Accordion.
-  - Full i18n support in 3 languages (PT, EN, ES) with instant client language toggle.
-  - LGPD Cookie consent modal and compliant footer.
-  - Official HelpUS circular branding across all touchpoints.
+- **Public Commercial Landing Page (Option A - Serviços de Publicidade Claros & Humanos)**: 
+  - Posicionamento comercial direto e humanizado: a HelpUS gerencia os anúncios e o marketing da empresa do cliente com IA (Meta Ads, Google Ads, LinkedIn Ads).
+  - Seção *"O que é a HelpUS Advert em 1 minuto"* (`#o-que-e`): 3 passos diretos (Alinhamento rápido -> Criação com IA -> Clientes no WhatsApp).
+  - Seção *"Planos de Serviço Transparentes"* (`#planos`): 3 planos claros (Start Local, Escala Pro, Autoridade B2B) com entregas detalhadas e botões de contratação direta via WhatsApp.
+  - Cockpit Dinâmico de Campanha (+214% ROI, 342.8k alcance).
+  - Simulador de ROI & Orçamento Interativo com cálculos dinâmicos e links personalizados de WhatsApp.
+  - Vitrine de Formatos Criativos Interativa (Carrossel Instagram/LinkedIn, Roteiros Reels/TikTok, Anúncios de Tráfego Pago, Artigos Executivos).
+  - Ciclo Operacional em 4 etapas e FAQ Interativo com Acordeom.
+  - Cobertura 100% Multilíngue (Português, Inglês, Espanhol) em toda a aplicação sem textos fixos.
+  - Responsividade 100% testada e fluida para Mobile, Tablet e Desktop.
+  - Modal de consentimento LGPD de Cookies e rodapé em conformidade legal.
+  - Identidade visual HelpUS padronizada com badges, ícones e logotipo oficial.
 - **SuperAdmin Operations Hub (Gated)**:
   - Google OAuth SuperAdmin gate (`helpus.ecommerce@gmail.com`).
   - `/brands`: Interactive brand directory with real-time search and creation modal.
