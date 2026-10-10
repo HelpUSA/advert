@@ -92,7 +92,6 @@ export default function Footer() {
             <ShieldAlert className="w-3.5 h-3.5 text-sky-400" />
             <span>{t.cookies.policy}</span>
           </a>
-          <span className="text-slate-700">•</span>
           <a
             href="https://helpusbr.com/admin"
             target="_blank"
@@ -101,6 +100,15 @@ export default function Footer() {
           >
             <span>{t.nav.backToHub}</span>
             <ArrowUpRight className="w-3 h-3" />
+          </a>
+          <span className="text-slate-700">•</span>
+          <a
+            href="/login"
+            className="hover:text-amber-300 text-amber-400 font-semibold transition flex items-center gap-1.5"
+            title="Acessar Área Restrita do SuperAdmin"
+          >
+            <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
+            <span>Mesa de Operações (SuperAdmin)</span>
           </a>
         </div>
 

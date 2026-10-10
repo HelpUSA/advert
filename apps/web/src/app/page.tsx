@@ -140,15 +140,13 @@ export default function Home() {
                     <span>{t.publicLanding.uiLabels?.adminActiveSession || 'Mesa de Operações (Ativa)'}</span>
                   </Link>
                 ) : (
-                  <a
-                    href="https://helpusbr.com/admin"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 py-4 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-bold text-xs sm:text-sm border border-slate-700 transition flex items-center gap-2"
+                  <Link
+                    href="/login"
+                    className="px-6 py-4 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-amber-400 font-bold text-xs sm:text-sm border border-amber-400/40 hover:border-amber-400 transition flex items-center gap-2 shadow-lg"
                   >
-                    <ExternalLink className="w-4 h-4 text-sky-400" />
-                    <span>{t.publicLanding.ctaHub}</span>
-                  </a>
+                    <ShieldCheck className="w-4 h-4 text-amber-400" />
+                    <span>Mesa de Operações</span>
+                  </Link>
                 )}
               </div>
 
