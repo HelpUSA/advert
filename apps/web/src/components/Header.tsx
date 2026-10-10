@@ -410,18 +410,6 @@ export default function Header() {
             </a>
           )}
 
-          {/* Atalho de Acesso SuperAdmin para a Mesa de Operações */}
-          {!isAuthenticated && (
-            <Link
-              href="/login"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-amber-400/40 hover:border-amber-400 text-amber-400 text-xs font-bold transition shadow-sm"
-              title="Acessar Mesa de Operações HelpUS"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-              <span className="hidden sm:inline">Mesa de Operações</span>
-            </Link>
-          )}
-
           {/* Se SuperAdmin Autenticado: Menu do Usuário */}
           {isAuthenticated && user && (
             <div className="relative">
@@ -492,18 +480,6 @@ export default function Header() {
             </div>
           )}
 
-          {/* Atalho Hub Central */}
-          <a
-            href="https://helpusbr.com/admin"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition"
-            title="Ir para a Central Administrativa HelpUS"
-          >
-            <span>Hub</span>
-            <ExternalLink className="w-3 h-3 text-slate-400" />
-          </a>
-
           {/* Botão Mobile Menu */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -542,28 +518,17 @@ export default function Header() {
               <MessageCircle className="w-4 h-4" />
               <span>WhatsApp</span>
             </a>
-            {!isAuthenticated && (
-              <Link
-                href="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-bold text-amber-400 bg-slate-900 border border-amber-400/30"
+            {isAuthenticated && (
+              <a
+                href="https://helpusbr.com/admin"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold text-sky-400 bg-slate-900"
               >
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-amber-400" />
-                  <span>Acessar Mesa de Operações</span>
-                </div>
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              </Link>
+                <span>{t.nav.backToHub}</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
             )}
-            <a
-              href="https://helpusbr.com/admin"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold text-sky-400 bg-slate-900"
-            >
-              <span>{t.nav.backToHub}</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
           </div>
         </div>
       )}
