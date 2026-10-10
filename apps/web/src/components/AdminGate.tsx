@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useLanguage } from '../lib/LanguageContext';
 import { useGoogleAuth, SUPERADMIN_EMAIL } from '../lib/useGoogleAuth';
-import { Lock, ShieldCheck, ArrowLeft, ExternalLink, Sparkles, KeyRound, HelpCircle } from 'lucide-react';
+import { Lock, ArrowLeft, ExternalLink, Sparkles } from 'lucide-react';
 
 interface AdminGateProps {
   children: React.ReactNode;
@@ -12,8 +12,7 @@ interface AdminGateProps {
 
 export default function AdminGate({ children }: AdminGateProps) {
   const { t, language } = useLanguage();
-  const { user, isAuthenticated, isLoading, error, login, loginDirectMaster } = useGoogleAuth();
-  const [showOAuthHelp, setShowOAuthHelp] = useState(false);
+  const { user, isAuthenticated, isLoading, error, login } = useGoogleAuth();
 
   const isEn = language === 'en';
   const isEs = language === 'es';
@@ -49,59 +48,58 @@ export default function AdminGate({ children }: AdminGateProps) {
           </div>
         )}
 
-        <div className="space-y-3 pt-2">
-          {/* Botão de Login Google Oficial */}
+        <div className="space-y-4 pt-2">
+          {/* Card de Informação da Conta Autorizada */}
+          <div className="p-3.5 bg-slate-950/80 border border-slate-800 rounded-2xl text-center space-y-1">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-amber-400 block">
+              Conta Google Autorizada
+            </span>
+            <p className="text-xs font-mono font-bold text-white tracking-wide">
+              {SUPERADMIN_EMAIL}
+            </p>
+            <p className="text-[10px] text-slate-400 leading-tight">
+              Apenas este e-mail possui permissão de SuperAdmin na Mesa de Operações.
+            </p>
+          </div>
+
+          {/* Único Botão Oficial: Conectar com o Google */}
           <button
             onClick={login}
             disabled={isLoading}
-            className="w-full py-3.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-600/20 transition flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs shadow-xl shadow-white/5 transition flex items-center justify-center gap-3 cursor-pointer border border-slate-200 group active:scale-[0.99]"
           >
-            <ShieldCheck className="w-4 h-4" />
-            <span>{isLoading ? '...' : t.adminAccess.loginSuperadmin}</span>
-          </button>
-
-          {/* Botão de Acesso Direto SuperAdmin Master (Bypass de Emergência) */}
-          <button
-            onClick={loginDirectMaster}
-            className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 border border-amber-500/40 text-amber-300 font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"
-          >
-            <KeyRound className="w-4 h-4 text-amber-400" />
+            <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+              />
+            </svg>
             <span>
-              {isEn
-                ? 'Instant SuperAdmin Master Access'
+              {isLoading
+                ? isEn
+                  ? 'Connecting to Google...'
+                  : isEs
+                  ? 'Conectando con Google...'
+                  : 'Conectando ao Google...'
+                : isEn
+                ? 'Sign in with Google'
                 : isEs
-                ? 'Acceso Inmediato SuperAdmin Master'
-                : 'Acesso Direto SuperAdmin Master'}
+                ? 'Iniciar sesión con Google'
+                : 'Entrar com o Google'}
             </span>
           </button>
-
-          <p className="text-[11px] text-slate-500 font-mono">
-            {t.adminAccess.onlyEmail} <span className="text-slate-300 font-semibold">{SUPERADMIN_EMAIL}</span>
-          </p>
-
-          <div className="pt-1">
-            <button
-              type="button"
-              onClick={() => setShowOAuthHelp(!showOAuthHelp)}
-              className="text-[10px] text-slate-400 hover:text-slate-300 transition flex items-center justify-center gap-1 mx-auto"
-            >
-              <HelpCircle className="w-3 h-3 text-sky-400" />
-              <span>{showOAuthHelp ? 'Ocultar dica OAuth' : 'Erro "origin_mismatch" no Google?'}</span>
-            </button>
-
-            {showOAuthHelp && (
-              <div className="mt-2 p-3 bg-slate-950 border border-slate-800 rounded-xl text-left text-[11px] text-slate-400 space-y-1.5">
-                <p className="text-slate-300 font-semibold">Como liberar o login Google no Cloud Console:</p>
-                <ol className="list-decimal pl-4 space-y-0.5 text-slate-400 text-[10px]">
-                  <li>Acesse o <strong>Google Cloud Console → APIs & Serviços → Credenciais</strong>.</li>
-                  <li>Abra o Client ID OAuth 2.0 existente.</li>
-                  <li>Em <strong>Origens JavaScript autorizadas</strong>, adicione: <code className="text-amber-400 bg-slate-900 px-1 py-0.5 rounded">https://advert.helpusbr.com</code></li>
-                  <li>Em <strong>URIs de redirecionamento</strong>, adicione: <code className="text-amber-400 bg-slate-900 px-1 py-0.5 rounded">https://advert.helpusbr.com</code></li>
-                  <li>Clique em <strong>Salvar</strong>. Enquanto propaga, use o botão <em>Acesso Direto SuperAdmin Master</em> acima.</li>
-                </ol>
-              </div>
-            )}
-          </div>
         </div>
 
         <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">

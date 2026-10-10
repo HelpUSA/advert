@@ -63,7 +63,15 @@ export function useGoogleAuth() {
     if (cleanEmail !== SUPERADMIN_EMAIL) {
       setIsLoading(false);
       setIsAuthenticated(false);
-      setError(`⛔ Acesso restrito: ${cleanEmail} não é o SuperAdmin.`);
+      setUser(null);
+      try {
+        localStorage.removeItem('helpus_google_auth_user');
+        localStorage.removeItem('usuario');
+        localStorage.removeItem('token');
+      } catch {}
+      setError(
+        `⛔ Acesso Negado: A conta Google "${cleanEmail}" não tem permissão de SuperAdmin. O acesso é exclusivo para ${SUPERADMIN_EMAIL}.`
+      );
       return;
     }
 
@@ -89,7 +97,7 @@ export function useGoogleAuth() {
     setError('');
   }, []);
 
-  // 4. Executar Login Google OAuth
+  // 4. Executar Login Google OAuth Oficial
   const login = useCallback(() => {
     setError('');
     setIsLoading(true);
@@ -110,7 +118,7 @@ export function useGoogleAuth() {
                 processUserInfo(info);
               } catch {
                 setIsLoading(false);
-                setError('Erro ao validar dados com o Google.');
+                setError('Erro ao validar dados do perfil com o Google.');
               }
             } else {
               setIsLoading(false);
@@ -120,7 +128,10 @@ export function useGoogleAuth() {
             setIsLoading(false);
           },
         });
-        client.requestAccessToken({ prompt: 'select_account' });
+        client.requestAccessToken({
+          prompt: 'select_account',
+          login_hint: SUPERADMIN_EMAIL,
+        });
         return;
       } catch {
         // Fallback
@@ -129,7 +140,9 @@ export function useGoogleAuth() {
 
     // Fallback popup direto
     const redirectUri = encodeURIComponent(window.location.origin);
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=email%20profile%20openid&prompt=select_account`;
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=email%20profile%20openid&prompt=select_account&login_hint=${encodeURIComponent(
+      SUPERADMIN_EMAIL
+    )}`;
     window.open(authUrl, 'GoogleSignIn', 'width=500,height=650');
     setIsLoading(false);
   }, [processUserInfo]);
