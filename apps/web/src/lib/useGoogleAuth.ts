@@ -70,7 +70,7 @@ export function useGoogleAuth() {
         localStorage.removeItem('token');
       } catch {}
       setError(
-        `⛔ Acesso Negado: A conta Google "${cleanEmail}" não tem permissão de SuperAdmin. O acesso é exclusivo para ${SUPERADMIN_EMAIL}.`
+        `⛔ Acesso Negado: A conta "${cleanEmail}" não possui permissão de acesso ao painel administrativo.`
       );
       return;
     }

@@ -415,7 +415,7 @@ export default function Header() {
             <Link
               href="/login"
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-amber-400/40 hover:border-amber-400 text-amber-400 text-xs font-bold transition shadow-sm"
-              title="Acessar Mesa de Operações (helpus.ecommerce@gmail.com)"
+              title="Acessar Mesa de Operações HelpUS"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
               <span className="hidden sm:inline">Mesa de Operações</span>
