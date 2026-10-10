@@ -17,7 +17,8 @@ Stage 5 - Full Operational AdTech Platform & Production Launch
   - Modal de consentimento LGPD de Cookies e rodapé em conformidade legal.
   - Identidade visual HelpUS padronizada com badges, ícones e logotipo oficial.
 - **SuperAdmin Operations Hub (Gated)**:
-  - Google OAuth SuperAdmin gate (`helpus.ecommerce@gmail.com`).
+  - Tela de Login Padronizada HelpUS: Design oficial com logotipo circular, sem vazamento ou enumeração de e-mails autorizados (mitigando falha de segurança).
+  - Autenticação exclusiva com Google OAuth, validação estrita em runtime e rota oficial `/login`.
   - `/brands`: Interactive brand directory with real-time search and creation modal.
   - `/campaigns`: Multichannel campaign pipeline with real-time search and creation modal.
   - `/calendar`: Interactive monthly calendar grid for October 2026, channel filters, and scheduling modal.
